@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="BankProject2.CreditCardPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="Auto" Width="Auto"
+             Background="#F4F6FB">
+    <UserControl.Resources>
+        <!-- Modern Border ve başlıklar için stil -->
+        <Style TargetType="Border">
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Background" Value="#F4F6FB"/>
+            <Setter Property="Padding" Value="18"/>
+            <Setter Property="Margin" Value="0,0,16,0"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Border Background="#fff" CornerRadius="18" Padding="36" Margin="40" Effect="{DynamicResource DropShadowEffect}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="520">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,18" VerticalAlignment="Center">
+                    <Viewbox Width="38" Height="38" Margin="0,0,12,0" VerticalAlignment="Center">
+                        <Canvas Width="32" Height="32">
+                            <Ellipse Width="32" Height="32" Fill="#F7D90F"/>
+                            <TextBlock Text="💳" FontSize="18" FontWeight="Bold" Foreground="#222" Canvas.Left="6" Canvas.Top="5"/>
+                        </Canvas>
+                    </Viewbox>
+                    <TextBlock Text="Kredi Kartı" FontSize="28" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
+                </StackPanel>
+                <TextBlock Text="Kart limitinizi ve borcunuzu görüntüleyin, işlemlerinizi kolayca yönetin." FontSize="15" Foreground="#888" HorizontalAlignment="Center" Margin="0,0,0,18"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,18" >
+                    <Border>
+                        <StackPanel>
+                            <TextBlock Text="Kullanılabilir Limit" FontSize="14" Foreground="#888"/>
+                            <TextBlock x:Name="LimitText" Text="-" FontSize="22" FontWeight="Bold" Foreground="#222"/>
+                        </StackPanel>
+                    </Border>
+                    <Border>
+                        <StackPanel>
+                            <TextBlock Text="Güncel Borç" FontSize="14" Foreground="#888"/>
+                            <TextBlock x:Name="DebtText" Text="-" FontSize="22" FontWeight="Bold" Foreground="#C0392B"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,24" >
+                    <Button Content="Limit Artır" Width="150" Height="40" Background="#F7D90F" Foreground="#222" FontWeight="SemiBold" BorderThickness="0" Margin="0,0,16,0" Cursor="Hand"/>
+                    <Button Content="Borç Öde" Width="150" Height="40" Background="#222" Foreground="#fff" FontWeight="SemiBold" BorderThickness="0" Cursor="Hand"/>
+                </StackPanel>
+                <TextBlock Text="Kart İşlem Geçmişi" FontSize="20" FontWeight="Bold" Margin="0,10" HorizontalAlignment="Center"/>
+                <Border CornerRadius="10" Background="#fff" Padding="0" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="440" Height="220">
+                    <DataGrid x:Name="CreditCardDataGrid" Height="200" Width="420" Margin="0" Background="#fff" BorderThickness="0" RowBackground="#F9F9F9" AlternatingRowBackground="#F4F6FB" GridLinesVisibility="None" HeadersVisibility="Column" ColumnHeaderHeight="32" RowHeaderWidth="0" FontSize="15" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"/>
+                </Border>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
