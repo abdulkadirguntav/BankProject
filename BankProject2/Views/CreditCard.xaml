@@ -39,9 +39,26 @@
                         </StackPanel>
                     </Border>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,24" >
-                    <Button Content="Limit Artır" Width="150" Height="40" Background="#F7D90F" Foreground="#222" FontWeight="SemiBold" BorderThickness="0" Margin="0,0,16,0" Cursor="Hand"/>
-                    <Button Content="Borç Öde" Width="150" Height="40" Background="#222" Foreground="#fff" FontWeight="SemiBold" BorderThickness="0" Cursor="Hand"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                    <Button Content="Borç Öde"
+                            Width="120"
+                            Height="36"
+                            Click="PayDebt_Click"
+                            Background="#F7D90F"
+                            Foreground="Black"
+                            FontWeight="SemiBold"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Margin="0,0,16,0"/>
+                    <Button Content="Limit Arttır/Azalt"
+                            Width="160"
+                            Height="36"
+                            Click="ChangeLimit_Click"
+                            Background="#F7D90F"
+                            Foreground="Black"
+                            FontWeight="SemiBold"
+                            BorderThickness="0"
+                            Cursor="Hand"/>
                 </StackPanel>
                 <TextBlock Text="Kart İşlem Geçmişi" FontSize="20" FontWeight="Bold" Margin="0,10" HorizontalAlignment="Center"/>
                 <Border CornerRadius="10" Background="#fff" Padding="0" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="440" Height="220">

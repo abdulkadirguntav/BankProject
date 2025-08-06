@@ -9,11 +9,11 @@ namespace BankProject2.Models
     internal class DataBase
     {
         /*
--- 2️⃣ OLUŞTUR
+OLUŞTUR
 CREATE DATABASE Bank;
 USE Bank;
 
--- 3️⃣ MÜŞTERİ
+MÜŞTERİ
 CREATE TABLE Customer (
     CustomerID INT NOT NULL AUTO_INCREMENT,
     FirstName VARCHAR(255) NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE Customer (
     PRIMARY KEY (CustomerID)
 );
 
--- 4️⃣ DÖVİZ
+DÖVİZ
 CREATE TABLE Currency (
     CurrencyID INT NOT NULL AUTO_INCREMENT,
     CurrencyCode VARCHAR(10) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE Currency (
     PRIMARY KEY (CurrencyID)
 );
 
--- 5️⃣ HESAPLAR
+HESAPLAR
 CREATE TABLE Accounts (
     AccountID INT NOT NULL AUTO_INCREMENT,
     IBAN VARCHAR(34) UNIQUE,
@@ -52,7 +52,7 @@ CREATE TABLE Accounts (
     FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
 );
 
--- 6️⃣ KREDİ KARTI
+KREDİ KARTI
 CREATE TABLE CreditCard (
     CreditCardID INT NOT NULL AUTO_INCREMENT,
     CustomerID INT,
@@ -67,7 +67,7 @@ CREATE TABLE CreditCard (
     FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
 );
 
--- 7️⃣ İŞLEMLER
+ İŞLEMLER
 CREATE TABLE Transactions (
     TransactionID INT NOT NULL AUTO_INCREMENT,
     FromAccountID INT,
@@ -84,7 +84,7 @@ CREATE TABLE Transactions (
     FOREIGN KEY (CreditCardID) REFERENCES CreditCard(CreditCardID)
 );
 
--- 8️⃣ KREDİ (İSTERSEN KALSIN)
+ KREDİ (İSTERSEN KALSIN)
 CREATE TABLE Loan (
     LoanID INT NOT NULL AUTO_INCREMENT,
     LoanStatus VARCHAR(50) NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE Loan (
     FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
 );
 
--- 9️⃣ KREDİ ÖDEMELERİ (İSTERSEN KALSIN)
+ KREDİ ÖDEMELERİ (İSTERSEN KALSIN)
 CREATE TABLE LoanPayment (
     LoanPaymentID INT NOT NULL AUTO_INCREMENT,
     Amount DOUBLE,

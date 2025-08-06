@@ -43,6 +43,17 @@ namespace BankProject2
                 // Vade dolmuş mu kontrol et
                 if (vadeliHesap.MaturityDate.HasValue && vadeliHesap.MaturityDate.Value <= DateTime.Now)
                 {
+                    // Daha önce faiz ödemesi yapılmış mı kontrol et
+                    var existingPayment = context.transactions
+                        .FirstOrDefault(t => t.FromAccountID == vadeliHesap.AccountID && 
+                                           t.TransactionType == "Vadeli Faiz Ödemesi" &&
+                                           t.TransactionDate.Date == DateTime.Now.Date);
+                    
+                    if (existingPayment != null)
+                    {
+                        continue; // Bugün zaten faiz ödemesi yapılmış
+                    }
+                    
                     // Faiz hesapla
                     float faizTutari = CalculateInterest(vadeliHesap);
                     
@@ -80,7 +91,7 @@ namespace BankProject2
 
         private float CalculateInterest(Accounts vadeliHesap)
         {
-            if (!vadeliHesap.PrincipalAmount.HasValue || !vadeliHesap.InterestRate.HasValue || !vadeliHesap.MaturityDate.HasValue)
+            if (!vadeliHesap.PrincipalAmount.HasValue || !vadeliHesap.InterestRate.HasValue || !vadeliHesap.MaturityDate.HasValue || !vadeliHesap.StartDate.HasValue)
                 return 0;
 
             float anaPara = vadeliHesap.PrincipalAmount.Value;
@@ -93,8 +104,8 @@ namespace BankProject2
             // Vade dolmuş, faiz hesapla
             // Basit faiz hesaplama (yıllık)
             // Vade süresini hesapla (gün cinsinden)
-            TimeSpan vadeSuresi = vadeliHesap.MaturityDate.Value - DateTime.Now.AddDays(-1); // Vade dolduğu gün
-            int gunSayisi = Math.Max(0, (int)vadeSuresi.TotalDays);
+            TimeSpan vadeSuresi = vadeliHesap.MaturityDate.Value - vadeliHesap.StartDate.Value;
+            int gunSayisi = (int)vadeSuresi.TotalDays;
             
             // Yıllık faiz hesaplama
             float yillikFaiz = anaPara * (faizOrani / 100f);

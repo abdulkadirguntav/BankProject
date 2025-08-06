@@ -41,17 +41,89 @@ namespace BankProject2
             }
         }
 
+        private void NewPrincipalTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CalculateVadeliHesap();
+        }
+
+        private void MaturityPeriodComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CalculateVadeliHesap();
+        }
+
+
+
+        private void CalculateVadeliHesap()
+        {
+            if (!decimal.TryParse(NewPrincipalTextBox.Text, out decimal principal) || principal <= 0)
+            {
+                ClearCalculationResults();
+                return;
+            }
+
+            if (MaturityPeriodComboBox.SelectedItem == null)
+            {
+                ClearCalculationResults();
+                return;
+            }
+
+            // Vade süresini al
+            string maturityPeriodText = (MaturityPeriodComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+            int months = int.Parse(maturityPeriodText.Split(' ')[0]);
+            
+            // Faiz oranını vade süresine göre belirle
+            float interestRate = GetInterestRateByPeriod(months);
+            
+            // Vade tarihini hesapla
+            DateTime maturityDate = DateTime.Now.AddMonths(months);
+            
+            // Faiz hesapla
+            float totalInterest = CalculateTotalInterest((float)principal, interestRate, months);
+            float finalAmount = (float)principal + totalInterest;
+            
+            // Sonuçları göster
+            CalculatedInterestRateText.Text = interestRate.ToString("N1") + "%";
+            CalculatedMaturityDateText.Text = maturityDate.ToString("dd.MM.yyyy");
+            TotalInterestText.Text = totalInterest.ToString("N2") + " TL";
+            FinalAmountText.Text = finalAmount.ToString("N2") + " TL";
+        }
+
+        private float GetInterestRateByPeriod(int months)
+        {
+            // Vade süresine göre faiz oranı belirle
+            switch (months)
+            {
+                case 3: return 8.5f;  // 3 ay için %8.5
+                case 6: return 9.0f;  // 6 ay için %9.0
+                case 12: return 9.5f; // 12 ay için %9.5
+                case 24: return 10.0f; // 24 ay için %10.0
+                default: return 9.0f;
+            }
+        }
+
+        private float CalculateTotalInterest(float principal, float interestRate, int months)
+        {
+            // Basit faiz hesaplama
+            float annualInterest = principal * (interestRate / 100f);
+            float monthlyInterest = annualInterest / 12f;
+            float totalInterest = monthlyInterest * months;
+            
+            return totalInterest;
+        }
+
+        private void ClearCalculationResults()
+        {
+            CalculatedInterestRateText.Text = "-";
+            CalculatedMaturityDateText.Text = "-";
+            TotalInterestText.Text = "-";
+            FinalAmountText.Text = "-";
+        }
+
         private void CreateVadeliButton_Click(object sender, RoutedEventArgs e)
         {
             if (!decimal.TryParse(NewPrincipalTextBox.Text, out decimal principal) || principal <= 0)
             {
                 MessageBox.Show("Lütfen geçerli bir ana para tutarı giriniz.");
-                return;
-            }
-
-            if (InterestRateComboBox.SelectedItem == null)
-            {
-                MessageBox.Show("Lütfen faiz oranı seçiniz.");
                 return;
             }
 
@@ -85,14 +157,13 @@ namespace BankProject2
                     return;
                 }
 
-                // Faiz oranını al
-                string interestRateText = (InterestRateComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
-                float interestRate = float.Parse(interestRateText.Replace("%", ""));
-
                 // Vade süresini al
                 string maturityPeriodText = (MaturityPeriodComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
                 int months = int.Parse(maturityPeriodText.Split(' ')[0]);
                 DateTime maturityDate = DateTime.Now.AddMonths(months);
+                
+                // Faiz oranını belirle
+                float interestRate = GetInterestRateByPeriod(months);
 
                 // Vadeli hesap oluştur
                 var vadeliHesap = new Accounts
@@ -101,6 +172,7 @@ namespace BankProject2
                     Balance = (float)principal,
                     PrincipalAmount = (float)principal,
                     InterestRate = interestRate,
+                    StartDate = DateTime.Now,
                     MaturityDate = maturityDate,
                     AccruedInterest = 0,
                     IsBroken = false,
@@ -130,8 +202,8 @@ namespace BankProject2
                 
                 // Formu temizle
                 NewPrincipalTextBox.Text = "";
-                InterestRateComboBox.SelectedIndex = -1;
                 MaturityPeriodComboBox.SelectedIndex = -1;
+                ClearCalculationResults();
             }
         }
 

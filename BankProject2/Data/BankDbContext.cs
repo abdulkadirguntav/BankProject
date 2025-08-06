@@ -1,10 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using BankProject2.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BankProject2.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankProject2.Data
 {
@@ -33,7 +28,6 @@ namespace BankProject2.Data
                 .Property(c => c.CurrencyID)
                 .ValueGeneratedOnAdd();
         }
-
     }
 }
  

@@ -1,8 +1,4 @@
-﻿using BankProject2;
-using BankProject2.Data;
-using BankProject2.Models;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
-using System.Linq;
+﻿using BankProject2.Data;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,6 +8,7 @@ namespace BankProject2
     {
         private bool isLoggedIn = false;
         private BankProject2.Models.Customer currentUser = null;
+        
         public MainWindow()
         {
             InitializeComponent();

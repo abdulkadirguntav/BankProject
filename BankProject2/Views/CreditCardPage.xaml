@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="BankProject2.Views.CreditCardPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="400" Width="600">
+    <Grid Background="#F4F6FB">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="400">
+            <TextBlock Text="Credit Card Information" FontSize="22" FontWeight="Bold" Margin="0,0,0,18" HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                <TextBlock Text="Available Limit: " FontSize="15" FontWeight="SemiBold"/>
+                <TextBlock x:Name="LimitText" FontSize="15" Margin="8,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                <TextBlock Text="Debt: " FontSize="15" FontWeight="SemiBold"/>
+                <TextBlock x:Name="DebtText" FontSize="15" Margin="8,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,18">
+                <Button Content="Pay Debt" Width="120" Height="36" Margin="0,0,16,0"
+                        Background="#F7D90F" Foreground="Black" FontWeight="SemiBold"
+                        BorderThickness="0" Cursor="Hand" Click="PayDebt_Click"/>
+                <Button Content="Change Limit" Width="160" Height="36"
+                        Background="#F7D90F" Foreground="Black" FontWeight="SemiBold"
+                        BorderThickness="0" Cursor="Hand" Click="ChangeLimit_Click"/>
+            </StackPanel>
+            <TextBlock Text="Transaction History" FontSize="16" FontWeight="Bold" Margin="0,0,0,8"/>
+            <DataGrid x:Name="CreditCardDataGrid" Height="180" AutoGenerateColumns="True" Margin="0,0,0,0"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

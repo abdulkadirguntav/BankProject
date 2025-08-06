@@ -24,6 +24,9 @@ namespace BankProject2
                 // Vadeli hesap faiz hesaplama ve ödeme
                 ProcessVadeliInterest(context);
                 
+                // Maaş yatırma kontrolü
+                ProcessSalaryPayment(context);
+                
                 // Vadesiz hesap
                 var vadesiz = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Vadesiz");
                 var vadesizBalanceText = this.FindName("VadesizBalanceText") as TextBlock;
@@ -81,6 +84,17 @@ namespace BankProject2
                 // Vade dolmuş mu kontrol et
                 if (vadeliHesap.MaturityDate.HasValue && vadeliHesap.MaturityDate.Value <= DateTime.Now)
                 {
+                    // Daha önce faiz ödemesi yapılmış mı kontrol et
+                    var existingPayment = context.transactions
+                        .FirstOrDefault(t => t.FromAccountID == vadeliHesap.AccountID && 
+                                           t.TransactionType == "Vadeli Faiz Ödemesi" &&
+                                           t.TransactionDate.Date == DateTime.Now.Date);
+                    
+                    if (existingPayment != null)
+                    {
+                        continue; // Bugün zaten faiz ödemesi yapılmış
+                    }
+                    
                     // Faiz hesapla
                     float faizTutari = CalculateInterest(vadeliHesap);
                     
@@ -118,7 +132,7 @@ namespace BankProject2
 
         private float CalculateInterest(Accounts vadeliHesap)
         {
-            if (!vadeliHesap.PrincipalAmount.HasValue || !vadeliHesap.InterestRate.HasValue || !vadeliHesap.MaturityDate.HasValue)
+            if (!vadeliHesap.PrincipalAmount.HasValue || !vadeliHesap.InterestRate.HasValue || !vadeliHesap.MaturityDate.HasValue || !vadeliHesap.StartDate.HasValue)
                 return 0;
 
             float anaPara = vadeliHesap.PrincipalAmount.Value;
@@ -131,8 +145,8 @@ namespace BankProject2
             // Vade dolmuş, faiz hesapla
             // Basit faiz hesaplama (yıllık)
             // Vade süresini hesapla (gün cinsinden)
-            TimeSpan vadeSuresi = vadeliHesap.MaturityDate.Value - DateTime.Now.AddDays(-1); // Vade dolduğu gün
-            int gunSayisi = Math.Max(0, (int)vadeSuresi.TotalDays);
+            TimeSpan vadeSuresi = vadeliHesap.MaturityDate.Value - vadeliHesap.StartDate.Value;
+            int gunSayisi = (int)vadeSuresi.TotalDays;
             
             // Yıllık faiz hesaplama
             float yillikFaiz = anaPara * (faizOrani / 100f);
@@ -140,6 +154,41 @@ namespace BankProject2
             float toplamFaiz = gunlukFaiz * gunSayisi;
             
             return toplamFaiz;
+        }
+
+        private void ProcessSalaryPayment(BankDbContext context)
+        {
+            var customer = context.customer.FirstOrDefault(c => c.CustomerID == _customerId);
+            if (customer == null || customer.MonthlyIncome <= 0)
+                return;
+
+            var vadesizHesap = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Vadesiz");
+            if (vadesizHesap == null)
+                return;
+
+            // Bugünün tarihi
+            DateTime today = DateTime.Now;
+            
+            // Basit maaş yatırma kontrolü (her gün kontrol et, gerçek uygulamada daha karmaşık olabilir)
+            // Maaş yatırma günü kontrolü (varsayılan 15. gün)
+            if (today.Day == 15) // Sabit maaş günü
+            {
+                // Maaş yatır
+                vadesizHesap.Balance += customer.MonthlyIncome;
+                
+                // İşlem kaydı oluştur
+                context.transactions.Add(new Transactions
+                {
+                    TransactionType = "Maaş Yatırma",
+                    TransactionDate = today,
+                    Amount = customer.MonthlyIncome,
+                    FromAccountID = null, // Banka tarafından yatırılıyor
+                    ToAccountID = vadesizHesap.AccountID,
+                    Description = $"Maaş yatırıldı: {customer.MonthlyIncome:N2} TL"
+                });
+                
+                context.SaveChanges();
+            }
         }
 
         private void ParaGonderButton_Click(object sender, System.Windows.RoutedEventArgs e)

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UserControl x:Class="BankProject2.Views.PayDebtControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="260" Width="380">
+    <Grid Background="#F4F6FB" Margin="20">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
+            <TextBlock Text="Kredi Kartı Borç Ödeme" FontSize="22" FontWeight="Bold" Margin="0,0,0,18" HorizontalAlignment="Center"/>
+            <TextBlock Text="Mevcut Borç:" FontSize="15"/>
+            <TextBlock x:Name="DebtText" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,12"/>
+            <TextBlock Text="Ödeme Miktarı (TL):" FontSize="15" Margin="0,0,0,4"/>
+            <TextBox x:Name="AmountTextBox" Height="32" FontSize="15" Margin="0,0,0,18" Padding="8"/>
+            <Button Content="Öde" Height="36" Background="#F7D90F" Foreground="Black" FontWeight="SemiBold" BorderThickness="0" Cursor="Hand" Click="ConfirmButton_Click"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

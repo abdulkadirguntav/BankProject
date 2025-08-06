@@ -79,24 +79,50 @@
                     <TextBlock Text="Yeni Vadeli Hesap Oluştur" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,15"/>
                     
                     <TextBlock Text="Ana Para (TL)" FontSize="14" Foreground="#666" Margin="0,0,0,5"/>
-                    <TextBox x:Name="NewPrincipalTextBox" Margin="0,0,0,10"/>
-                    
-                    <TextBlock Text="Faiz Oranı (%)" FontSize="14" Foreground="#666" Margin="0,0,0,5"/>
-                    <ComboBox x:Name="InterestRateComboBox" Margin="0,0,0,10">
-                        <ComboBoxItem Content="5.0%"/>
-                        <ComboBoxItem Content="7.5%"/>
-                        <ComboBoxItem Content="10.0%"/>
-                        <ComboBoxItem Content="12.5%"/>
-                        <ComboBoxItem Content="15.0%"/>
-                    </ComboBox>
+                    <TextBox x:Name="NewPrincipalTextBox" Margin="0,0,0,10" TextChanged="NewPrincipalTextBox_TextChanged"/>
                     
                     <TextBlock Text="Vade Süresi" FontSize="14" Foreground="#666" Margin="0,0,0,5"/>
-                    <ComboBox x:Name="MaturityPeriodComboBox" Margin="0,0,0,15">
+                    <ComboBox x:Name="MaturityPeriodComboBox" Margin="0,0,0,10" SelectionChanged="MaturityPeriodComboBox_SelectionChanged">
                         <ComboBoxItem Content="3 Ay"/>
                         <ComboBoxItem Content="6 Ay"/>
                         <ComboBoxItem Content="12 Ay"/>
                         <ComboBoxItem Content="24 Ay"/>
                     </ComboBox>
+                    
+                    <!-- Hesaplama Sonuçları -->
+                    <Border Background="#E8F5E8" Padding="15" Margin="0,0,0,15" CornerRadius="8">
+                        <StackPanel>
+                            <TextBlock Text="Hesaplama Sonuçları" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                    <TextBlock Text="Faiz Oranı" FontSize="12" Foreground="#666"/>
+                                    <TextBlock x:Name="CalculatedInterestRateText" Text="-" FontSize="16" FontWeight="Bold" Foreground="#27AE60"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Vade Tarihi" FontSize="12" Foreground="#666"/>
+                                    <TextBlock x:Name="CalculatedMaturityDateText" Text="-" FontSize="16" FontWeight="Bold" Foreground="#9B59B6"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                    <TextBlock Text="Toplam Faiz" FontSize="12" Foreground="#666"/>
+                                    <TextBlock x:Name="TotalInterestText" Text="-" FontSize="16" FontWeight="Bold" Foreground="#F39C12"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Vade Sonu Tutar" FontSize="12" Foreground="#666"/>
+                                    <TextBlock x:Name="FinalAmountText" Text="-" FontSize="16" FontWeight="Bold" Foreground="#E74C3C"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
                     
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button x:Name="CreateVadeliButton" Content="Vadeli Hesap Oluştur" Width="200" Margin="0,0,10,0" Click="CreateVadeliButton_Click"/>

@@ -1,11 +1,7 @@
-﻿using System.Windows.Controls;
-using System.Windows;
-using System.Windows.Input;
+﻿using BankProject2.Data;
 using System.Globalization;
-using System.Collections.Generic;
-using BankProject2.Data;
-using BankProject2.Models;
-using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace BankProject2
 {

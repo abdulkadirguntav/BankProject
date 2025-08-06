@@ -1,14 +1,15 @@
-ï»¿using System.Windows.Controls;
+using System.Windows.Controls;
 using System.Windows;
 using BankProject2.Data;
 using BankProject2.Models;
 using System.Linq;
 
-namespace BankProject2
+namespace BankProject2.Views
 {
     public partial class CreditCardPage : UserControl
     {
         private int customerId;
+
         public CreditCardPage(int customerId)
         {
             InitializeComponent();
@@ -23,38 +24,40 @@ namespace BankProject2
                 var creditCard = context.creditCard.FirstOrDefault(c => c.CustomerID == customerId);
                 if (creditCard != null)
                 {
-                    var limitText = this.FindName("LimitText") as TextBlock;
-                    var debtText = this.FindName("DebtText") as TextBlock;
                     float kullanilabilirLimit = creditCard.Limit - creditCard.CurrentDebt;
-                    if (limitText != null) limitText.Text = kullanilabilirLimit.ToString("N2") + " TL";
-                    if (debtText != null) debtText.Text = creditCard.CurrentDebt.ToString("N2") + " TL";
-                }
-                if (creditCard != null)
-                {
+                    LimitText.Text = kullanilabilirLimit.ToString("N2") + " TL";
+                    DebtText.Text = creditCard.CurrentDebt.ToString("N2") + " TL";
+
                     var transactions = context.transactions
                         .Where(t => t.CreditCardID == creditCard.CreditCardID)
                         .OrderByDescending(t => t.TransactionDate)
                         .ToList();
-                    var dataGrid = this.FindName("CreditCardDataGrid") as DataGrid;
-                    if (dataGrid != null) dataGrid.ItemsSource = transactions;
+                    CreditCardDataGrid.ItemsSource = transactions;
+                }
+                else
+                {
+                    LimitText.Text = "-";
+                    DebtText.Text = "-";
+                    CreditCardDataGrid.ItemsSource = null;
                 }
             }
         }
 
         private void PayDebt_Click(object sender, RoutedEventArgs e)
         {
-            var payDebtControl = new BankProject2.Views.PayDebtControl(customerId);
-            ShowDialogUserControl(payDebtControl, "Pay Debt");
+            var payDebtControl = new PayDebtControl(customerId);
+            ShowDialogUserControl(payDebtControl, "Borç Öde");
             LoadCreditCardData();
         }
 
         private void ChangeLimit_Click(object sender, RoutedEventArgs e)
         {
-            var changeLimitControl = new BankProject2.Views.ChangeLimitControl(customerId);
-            ShowDialogUserControl(changeLimitControl, "Change Limit");
+            var changeLimitControl = new ChangeLimitControl(customerId);
+            ShowDialogUserControl(changeLimitControl, "Limit Arttýr/Azalt");
             LoadCreditCardData();
         }
 
+        // UserControl'ü modal pencere olarak göstermek için yardýmcý fonksiyon
         private void ShowDialogUserControl(UserControl control, string title)
         {
             var window = new Window
