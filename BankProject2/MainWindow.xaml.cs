@@ -138,14 +138,14 @@ namespace BankProject2
             MainContent.Content = new CurrentPage();
         }
 
-        private void Sell_Buy_Click(object sender, RoutedEventArgs e)
+        public void Sell_Buy_Click(object sender, RoutedEventArgs e)
         {
             if (!isLoggedIn)
             {
                 MessageBox.Show("Lütfen önce giriş yapınız.");
                 return;
             }
-            MainContent.Content = new Sell_BuyPage();
+            MainContent.Content = new Sell_BuyPage(currentUser.CustomerID);
         }
         
     }

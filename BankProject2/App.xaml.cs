@@ -7,7 +7,6 @@ using System.Xml.Linq;
 using BankProject2.Data;
 using BankProject2.Models;
 using System.Globalization;
-
 namespace BankProject2
 {
     public partial class App : Application

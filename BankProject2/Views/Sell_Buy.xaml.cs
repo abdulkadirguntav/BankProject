@@ -13,7 +13,7 @@ namespace BankProject2
         private bool _isSellAmountChanging = false;
         private bool _isSellTotalChanging = false;
 
-        public Sell_BuyPage()
+        public Sell_BuyPage(int customerId)
         {
             InitializeComponent();
             LoadCurrencyRates();
@@ -144,6 +144,14 @@ namespace BankProject2
                     return false;
             }
             return true;
+        }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            /*
+             *  
+             * 
+             */
         }
     }
 }

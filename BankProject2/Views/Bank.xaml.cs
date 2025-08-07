@@ -1,8 +1,9 @@
 ﻿using BankProject2.Data;
-using System.Windows.Controls;
 using BankProject2.Models;
-using System.Linq;
 using System;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace BankProject2
 {
@@ -222,5 +223,52 @@ namespace BankProject2
         }
 
         private int GetCustomerId() => _customerId;
+
+        private void OpenSellBuyPageButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            using (var context = new BankDbContext())
+            {
+                var dovizHesap = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Döviz");
+
+                if (dovizHesap == null)
+                {
+                    MessageBox.Show("Lütfen önce Döviz Hesabı oluşturunuz.");
+                    return;
+                }
+
+                else
+                {
+                    MainWindow mainWindow = Window.GetWindow(this) as MainWindow;
+
+                    mainWindow.Sell_Buy_Click(sender, e);
+                }
+            }
+        }
+
+        private void DovizHesapOlusturButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            using (var context = new BankDbContext())
+            {
+                // Döviz hesabı zaten var mı kontrol et
+                var existingAccount = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Döviz");
+                
+                if (existingAccount != null)
+                {
+                    MessageBox.Show("Zaten bir Döviz Hesabınız var.");
+                    return;
+                }
+                // Yeni döviz hesabı oluştur
+                var newAccount = new Accounts
+                {
+                    CustomerID = _customerId,
+                    AccountType = "Döviz",
+                    Balance = 0,
+                    
+                };
+                context.accounts.Add(newAccount);
+                context.SaveChanges();
+                MessageBox.Show("Döviz Hesabı başarıyla oluşturuldu.");
+            }
+        }
     }
 }
