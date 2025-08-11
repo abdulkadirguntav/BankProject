@@ -136,7 +136,7 @@ namespace BankProject2
             using (var context = new BankDbContext())
             {
                 // Mevcut vadeli hesap var mı kontrol et
-                var existingVadeli = context.accounts.FirstOrDefault(a => a.CustomerID == customerId && a.AccountType == "Vadeli");
+                var existingVadeli = context.accounts.FirstOrDefault(a => a.CustomerID == customerId && a.AccountType == "Vadeli" && (a.IsBroken == false || a.IsBroken == null));
                 if (existingVadeli != null)
                 {
                     MessageBox.Show("Zaten bir vadeli hesabınız bulunmaktadır.");
@@ -183,7 +183,11 @@ namespace BankProject2
                 // Vadesiz hesaptan para çek
                 vadesizHesap.Balance -= (float)principal;
 
-                // İşlem kaydı oluştur
+                // Önce vadeli hesabı ekle ve ID oluşturulsun
+                context.accounts.Add(vadeliHesap);
+                context.SaveChanges();
+
+                // İşlem kaydı oluştur (artık ToAccountID mevcut)
                 context.transactions.Add(new Transactions
                 {
                     TransactionType = "Vadeli Hesap Açılışı",
@@ -194,7 +198,6 @@ namespace BankProject2
                     Description = $"Vadeli hesap açıldı. Faiz oranı: %{interestRate}, Vade: {maturityDate:dd.MM.yyyy}"
                 });
 
-                context.accounts.Add(vadeliHesap);
                 context.SaveChanges();
 
                 MessageBox.Show("Vadeli hesap başarıyla oluşturuldu!");

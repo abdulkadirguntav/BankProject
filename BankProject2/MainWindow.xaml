@@ -23,6 +23,7 @@
                 <TextBlock Text="VAKIFBANK" FontWeight="Bold" FontSize="28" Foreground="#222" Margin="0,0,8,0"/>
                 <TextBlock Text="•" FontSize="28" Foreground="#F7D90F" Margin="0,0,8,0"/>
                 <TextBlock Text="Dijital Bankacılık" FontSize="18" Foreground="#888"/>
+                <Button x:Name="Çıkış" Content="O" FontWeight="Bold" FontSize="40" Background="Red" Foreground="Black" Height="40" Width="40" Margin="650,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right" BorderBrush="Black" FontFamily="Bahnschrift" Click="log_out_btnClick"/>
             </StackPanel>
         </Border>
 

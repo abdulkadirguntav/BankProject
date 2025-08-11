@@ -12,6 +12,7 @@ namespace BankProject2
         private bool _isBuyTotalChanging = false;
         private bool _isSellAmountChanging = false;
         private bool _isSellTotalChanging = false;
+        const float MIN_AMOUNT = 5.0f; // Minimum 5 birim
 
         public Sell_BuyPage(int customerId)
         {

@@ -34,7 +34,7 @@ namespace BankProject2
                         .Select(g => g.First())
                         .ToList();
                     currencyRates = rates.ToDictionary(c => c.CurrencyCode, c => c.RateToTRY);
-                    CurrencyComboBox.ItemsSource = currencyRates.Keys;
+                   // CurrencyComboBox.ItemsSource = currencyRates.Keys;
                     if (currencyRates.Keys.Any())
                         CurrencyComboBox.SelectedIndex = 0;
 
@@ -44,7 +44,7 @@ namespace BankProject2
                     foreach (var acc in accounts)
                     {
                         // Sadece vadesiz ve vadeli hesaplar
-                        if (acc.AccountType == "Vadesiz" || acc.AccountType == "Vadeli")
+                        if (acc.AccountType == "Vadesiz" /*|| acc.AccountType == "Vadeli" */)
                         {
                             totalAssetTL += acc.Balance;
                         }
@@ -76,6 +76,12 @@ namespace BankProject2
             {
                 ResultTextBlock.Text = "0,00";
             }
+        }
+
+        // Döviz alım/satım, transfer, hesap açma gibi işlemlerden sonra:
+        private void LoadCurrencyData()
+        {
+            UpdateCurrencyRates();
         }
     }
 }

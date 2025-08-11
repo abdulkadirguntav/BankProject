@@ -147,6 +147,20 @@ namespace BankProject2
             }
             MainContent.Content = new Sell_BuyPage(currentUser.CustomerID);
         }
+
+        // Logout fonksiyonu
+        public void Logout()
+        {
+            isLoggedIn = false;
+            currentUser = null;
+            MessageBox.Show("Başarıyla çıkış yaptınız.");
+            LoadHomePage();
+        }
+
+        private void log_out_btnClick(object sender, RoutedEventArgs e)
+        {
+            Logout();
+        }
         
     }
 }
