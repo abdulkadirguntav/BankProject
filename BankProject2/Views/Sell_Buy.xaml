@@ -71,27 +71,31 @@
                 <TabItem Header="Al">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="420">
                         <ComboBox x:Name="BuyCurrencyComboBox" Width="340" Height="38" Margin="0,0,0,12" FontSize="15"/>
-                        <TextBlock x:Name="BuyCurrencyRateText" Text="1 USD = 32,00 TL" FontSize="16" Foreground="#444" HorizontalAlignment="Center" Margin="0,0,0,24"/>
+                        <TextBlock x:Name="BuyCurrencyRateText" Text="1 USD = 32,00 TL" FontSize="16" Foreground="#444" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                        <TextBlock x:Name="BuySelectedBalanceText" Text="Bakiye: 0,00" FontSize="13" Foreground="#666" HorizontalAlignment="Center" Margin="0,0,0,18"/>
                         <StackPanel Orientation="Vertical" Margin="0,0,0,24">
                             <TextBlock Text="Döviz Miktarı" FontSize="13" Foreground="#888" Margin="0,0,0,2"/>
                             <TextBox x:Name="BuyAmountTextBox" Width="340" Height="36" Margin="0,0,0,8" FontSize="15" VerticalContentAlignment="Center" Padding="10" Style="{StaticResource WatermarkTextBox}" Tag="Döviz (örn. USD)" PreviewTextInput="AmountTextBox_PreviewTextInput"/>
                             <TextBlock Text="TL Karşılığı" FontSize="13" Foreground="#888" Margin="0,0,0,2"/>
                             <TextBox x:Name="BuyTotalTextBox" Width="340" Height="36" Margin="0,0,0,8" FontSize="15" VerticalContentAlignment="Center" Padding="10" Style="{StaticResource WatermarkTextBox}" Tag="TL" PreviewTextInput="AmountTextBox_PreviewTextInput"/>
+                            <TextBlock x:Name="BuyFeeText" Text="Komisyon: 0,00 TL" FontSize="12" Foreground="#888" HorizontalAlignment="Right"/>
                         </StackPanel>
-                        <Button Content="Al" Width="120" Height="38" Background="#F7D90F" Foreground="#222" FontWeight="SemiBold" BorderThickness="0"  Cursor="Hand" Style="{StaticResource {x:Type Button}}" Click="Button_Click"/>
+                        <Button Content="Al" Width="120" Height="38" Background="#F7D90F" Foreground="#222" FontWeight="SemiBold" BorderThickness="0"  Cursor="Hand" Style="{StaticResource {x:Type Button}}" Click="BuyButton_Click"/>
                     </StackPanel>
                 </TabItem>
                 <TabItem Header="Sat">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="420">
                         <ComboBox x:Name="SellCurrencyComboBox" Width="340" Height="38" Margin="0,0,0,12" FontSize="15"/>
-                        <TextBlock x:Name="SellCurrencyRateText" Text="1 USD = 32,00 TL" FontSize="16" Foreground="#444" HorizontalAlignment="Center" Margin="0,0,0,24"/>
+                        <TextBlock x:Name="SellCurrencyRateText" Text="1 USD = 32,00 TL" FontSize="16" Foreground="#444" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                        <TextBlock x:Name="SellSelectedBalanceText" Text="Bakiye: 0,00" FontSize="13" Foreground="#666" HorizontalAlignment="Center" Margin="0,0,0,18"/>
                         <StackPanel Orientation="Vertical" Margin="0,0,0,24">
                             <TextBlock Text="Döviz Miktarı" FontSize="13" Foreground="#888" Margin="0,0,0,2"/>
                             <TextBox x:Name="SellAmountTextBox" Width="340" Height="36" Margin="0,0,0,8" FontSize="15" VerticalContentAlignment="Center" Padding="10" Style="{StaticResource WatermarkTextBox}" Tag="Döviz (örn. USD)" PreviewTextInput="AmountTextBox_PreviewTextInput"/>
                             <TextBlock Text="TL Karşılığı" FontSize="13" Foreground="#888" Margin="0,0,0,2"/>
                             <TextBox x:Name="SellTotalTextBox" Width="340" Height="36" Margin="0,0,0,8" FontSize="15" VerticalContentAlignment="Center" Padding="10" Style="{StaticResource WatermarkTextBox}" Tag="TL" PreviewTextInput="AmountTextBox_PreviewTextInput"/>
+                            <TextBlock x:Name="SellFeeText" Text="Komisyon: 0,00 TL" FontSize="12" Foreground="#888" HorizontalAlignment="Right"/>
                         </StackPanel>
-                        <Button Content="Sat" Width="120" Height="38" Background="#222" Foreground="#fff" FontWeight="SemiBold" BorderThickness="0"  Cursor="Hand" Style="{StaticResource {x:Type Button}}"/>
+                        <Button Content="Sat" Width="120" Height="38" Background="#222" Foreground="#fff" FontWeight="SemiBold" BorderThickness="0"  Cursor="Hand" Style="{StaticResource {x:Type Button}}" Click="SellButton_Click"/>
                     </StackPanel>
                 </TabItem>
             </TabControl>

@@ -19,7 +19,6 @@ namespace BankProject2
         }
 
         private Dictionary<string, double> currencyRates = new Dictionary<string, double>();
-        private double totalAssetTL = 0;
 
         private async void UpdateCurrencyRates()
         {
@@ -34,25 +33,14 @@ namespace BankProject2
                         .Select(g => g.First())
                         .ToList();
                     currencyRates = rates.ToDictionary(c => c.CurrencyCode, c => c.RateToTRY);
-                   // CurrencyComboBox.ItemsSource = currencyRates.Keys;
-                    if (currencyRates.Keys.Any())
+                    
+                    // Sadece kullanıcının sahip olduğu dövizleri listele
+                    var userOwnedCurrencies = GetUserOwnedCurrencies(context);
+                    CurrencyComboBox.ItemsSource = userOwnedCurrencies;
+                    if (userOwnedCurrencies.Any())
                         CurrencyComboBox.SelectedIndex = 0;
-
-                    // Kullanıcının tüm hesaplarını çek
-                    var accounts = context.accounts.Where(a => a.CustomerID == customerId).ToList();
-                    totalAssetTL = 0;
-                    foreach (var acc in accounts)
-                    {
-                        // Sadece vadesiz ve vadeli hesaplar
-                        if (acc.AccountType == "Vadesiz" /*|| acc.AccountType == "Vadeli" */)
-                        {
-                            totalAssetTL += acc.Balance;
-                        }
-                        // Döviz hesapları için ileride CurrencyID ile işlem yapılabilir
-                    }
-                    AssetTextBox.Text = totalAssetTL.ToString("N2");
                 }
-                CalculateResult();
+                UpdateSelectedCurrencyBalance();
             }
             catch (Exception ex)
             {
@@ -60,28 +48,40 @@ namespace BankProject2
             }
         }
 
+        private List<string> GetUserOwnedCurrencies(BankDbContext context)
+        {
+            var userCurrencyAccounts = context.accounts
+                .Where(a => a.CustomerID == customerId && a.AccountType.StartsWith("Döviz-") && a.Balance > 0)
+                .Select(a => a.AccountType.Substring("Döviz-".Length))
+                .Distinct()
+                .ToList();
+            return userCurrencyAccounts;
+        }
+
         private void AssetOrCurrencyChanged(object sender, EventArgs e)
         {
-            CalculateResult();
+            UpdateSelectedCurrencyBalance();
         }
 
-        private void CalculateResult()
+        private void UpdateSelectedCurrencyBalance()
         {
-            if (CurrencyComboBox.SelectedItem is string selectedCurrency && currencyRates.TryGetValue(selectedCurrency, out double rate))
+            if (CurrencyComboBox.SelectedItem is string selectedCurrency)
             {
-                double result = totalAssetTL / rate;
-                ResultTextBlock.Text = result.ToString("N2", System.Globalization.CultureInfo.CurrentCulture) + $" {selectedCurrency}";
+                using (var context = new BankDbContext())
+                {
+                    var accountTypeCode = $"Döviz-{selectedCurrency}";
+                    var dovizHesap = context.accounts.FirstOrDefault(a => a.CustomerID == customerId && a.AccountType == accountTypeCode);
+                    if (dovizHesap != null)
+                    {
+                        // Virgül sonrası 2 hane göster
+                        SelectedCurrencyBalanceText.Text = $"{dovizHesap.Balance:N2} {selectedCurrency}";
+                    }
+                    else
+                    {
+                        SelectedCurrencyBalanceText.Text = $"0,00 {selectedCurrency}";
+                    }
+                }
             }
-            else
-            {
-                ResultTextBlock.Text = "0,00";
-            }
-        }
-
-        // Döviz alım/satım, transfer, hesap açma gibi işlemlerden sonra:
-        private void LoadCurrencyData()
-        {
-            UpdateCurrencyRates();
         }
     }
 }

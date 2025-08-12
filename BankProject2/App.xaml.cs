@@ -37,28 +37,39 @@ namespace BankProject2
                     return;
                 }
 
+                // XML'in tarihini al
+                string dateStr = doc.Root.Attribute("Date").Value; // "08/12/2025" formatında gelir
+                DateTime xmlDate = DateTime.ParseExact(dateStr, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
                 using (var context = new BankDbContext())
                 {
-                    foreach (var currency in doc.Descendants("Currency"))
+                    // Eğer bu tarih zaten kayıtlıysa ekleme
+                    bool alreadyExists = context.currency.Any(c => c.CurrencyDate.Date == xmlDate.Date);
+                    if (alreadyExists)
                     {
-                        string kod = currency.Attribute("Kod").Value;
-                        string buyingStr = currency.Element("ForexBuying").Value;
-
-                        if (double.TryParse(buyingStr, NumberStyles.Any, CultureInfo.InvariantCulture, out double rate))
+                        foreach (var currency in doc.Descendants("Currency"))
                         {
-                            var newCurrency = new Currency
-                            {
-                                CurrencyCode = kod,
-                                CurrencyDate = DateTime.Now,
-                                RateToTRY = rate
-                            };
+                            string kod = currency.Attribute("Kod").Value;
+                            string buyingStr = currency.Element("ForexBuying").Value;
 
-                            context.currency.Add(newCurrency);
+                            if (double.TryParse(buyingStr, NumberStyles.Any, CultureInfo.InvariantCulture, out double rate))
+                            {
+                                var newCurrency = new Currency
+                                {
+                                    CurrencyCode = kod,
+                                    CurrencyDate = xmlDate, // Burada XML'den gelen tarih
+                                    RateToTRY = rate
+                                };
+
+                                context.currency.Add(newCurrency);
+                            }
                         }
+                        context.SaveChanges();
                     }
-                    context.SaveChanges();
+                    
                 }
             }
         }
+
     }
 }

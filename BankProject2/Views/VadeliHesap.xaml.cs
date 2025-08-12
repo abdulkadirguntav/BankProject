@@ -16,6 +16,16 @@ namespace BankProject2
             InitializeComponent();
             this.customerId = customerId;
             LoadVadeliHesapData();
+            LoadVadesizBalance();
+        }
+
+        private void LoadVadesizBalance()
+        {
+            using (var context = new BankDbContext())
+            {
+                var vadesiz = context.accounts.FirstOrDefault(a => a.CustomerID == customerId && a.AccountType == "Vadesiz");
+                VadesizBalanceText.Text = vadesiz != null ? $"{vadesiz.Balance:N2} TL" : "0,00 TL";
+            }
         }
 
         private void LoadVadeliHesapData()
@@ -51,8 +61,6 @@ namespace BankProject2
             CalculateVadeliHesap();
         }
 
-
-
         private void CalculateVadeliHesap()
         {
             if (!decimal.TryParse(NewPrincipalTextBox.Text, out decimal principal) || principal <= 0)
@@ -70,35 +78,31 @@ namespace BankProject2
             // Vade süresini al
             string maturityPeriodText = (MaturityPeriodComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
             int months = int.Parse(maturityPeriodText.Split(' ')[0]);
-            
-            // Faiz oranını vade süresine göre belirle
-            float interestRate = GetInterestRateByPeriod(months);
-            
-            // Vade tarihini hesapla
             DateTime maturityDate = DateTime.Now.AddMonths(months);
             
-            // Faiz hesapla
-            float totalInterest = CalculateTotalInterest((float)principal, interestRate, months);
-            float finalAmount = (float)principal + totalInterest;
-            
-            // Sonuçları göster
-            CalculatedInterestRateText.Text = interestRate.ToString("N1") + "%";
+            // Faiz oranını belirle
+            float interestRate = GetInterestRateByPeriod(months);
+
+            // Hesaplama sonuçlarını göster
+            CalculatedInterestRateText.Text = $"%{interestRate:N1}";
             CalculatedMaturityDateText.Text = maturityDate.ToString("dd.MM.yyyy");
-            TotalInterestText.Text = totalInterest.ToString("N2") + " TL";
-            FinalAmountText.Text = finalAmount.ToString("N2") + " TL";
+            
+            float totalInterest = CalculateTotalInterest((float)principal, interestRate, months);
+            TotalInterestText.Text = $"{totalInterest:N2} TL";
+            FinalAmountText.Text = $"{(float)principal + totalInterest:N2} TL";
         }
 
         private float GetInterestRateByPeriod(int months)
         {
-            // Vade süresine göre faiz oranı belirle
-            switch (months)
+            // Vade süresine göre faiz oranı
+            return months switch
             {
-                case 3: return 8.5f;  // 3 ay için %8.5
-                case 6: return 9.0f;  // 6 ay için %9.0
-                case 12: return 9.5f; // 12 ay için %9.5
-                case 24: return 10.0f; // 24 ay için %10.0
-                default: return 9.0f;
-            }
+                3 => 15.0f,   // %15 yıllık
+                6 => 17.0f,   // %17 yıllık
+                12 => 20.0f,  // %20 yıllık
+                24 => 22.0f,  // %22 yıllık
+                _ => 15.0f    // Varsayılan
+            };
         }
 
         private float CalculateTotalInterest(float principal, float interestRate, int months)
@@ -135,11 +139,11 @@ namespace BankProject2
 
             using (var context = new BankDbContext())
             {
-                // Mevcut vadeli hesap var mı kontrol et
-                var existingVadeli = context.accounts.FirstOrDefault(a => a.CustomerID == customerId && a.AccountType == "Vadeli" && (a.IsBroken == false || a.IsBroken == null));
+                // Mevcut vadeli hesap var mı kontrol et (sadece aktif olanları)
+                var existingVadeli = context.accounts.FirstOrDefault(a => a.CustomerID == customerId && a.AccountType == "Vadeli" && a.IsBroken != true);
                 if (existingVadeli != null)
                 {
-                    MessageBox.Show("Zaten bir vadeli hesabınız bulunmaktadır.");
+                    MessageBox.Show("Zaten bir aktif vadeli hesabınız bulunmaktadır.");
                     return;
                 }
 
@@ -183,11 +187,7 @@ namespace BankProject2
                 // Vadesiz hesaptan para çek
                 vadesizHesap.Balance -= (float)principal;
 
-                // Önce vadeli hesabı ekle ve ID oluşturulsun
-                context.accounts.Add(vadeliHesap);
-                context.SaveChanges();
-
-                // İşlem kaydı oluştur (artık ToAccountID mevcut)
+                // İşlem kaydı oluştur
                 context.transactions.Add(new Transactions
                 {
                     TransactionType = "Vadeli Hesap Açılışı",
@@ -198,10 +198,12 @@ namespace BankProject2
                     Description = $"Vadeli hesap açıldı. Faiz oranı: %{interestRate}, Vade: {maturityDate:dd.MM.yyyy}"
                 });
 
+                context.accounts.Add(vadeliHesap);
                 context.SaveChanges();
 
                 MessageBox.Show("Vadeli hesap başarıyla oluşturuldu!");
                 LoadVadeliHesapData();
+                LoadVadesizBalance();
                 
                 // Formu temizle
                 NewPrincipalTextBox.Text = "";
@@ -213,6 +215,7 @@ namespace BankProject2
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             LoadVadeliHesapData();
+            LoadVadesizBalance();
         }
 
         private string GenerateIBAN()

@@ -13,17 +13,18 @@
                             <TextBlock Text="💰" FontSize="18" FontWeight="Bold" Foreground="#222" Canvas.Left="6" Canvas.Top="5"/>
                         </Canvas>
                     </Viewbox>
-                    <TextBlock Text="Varlık Dönüştürücü" FontSize="28" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
+                    <TextBlock Text="Döviz Hesaplarım" FontSize="28" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
                 </StackPanel>
-                <TextBlock Text="Toplam varlığınızı farklı para birimlerinde görüntüleyin." FontSize="15" Foreground="#888" HorizontalAlignment="Center" Margin="0,0,0,18"/>
-                <TextBlock Text="Toplam Varlık (TL)" FontSize="15" FontWeight="SemiBold" Foreground="#444" Margin="0,0,0,4"/>
-                <TextBox x:Name="AssetTextBox" Width="340" Height="36" FontSize="15" VerticalContentAlignment="Center" Padding="10" Margin="0,0,0,16" IsReadOnly="True"/>
-                <TextBlock Text="Dönüştürülecek Para Birimi" FontSize="15" FontWeight="SemiBold" Foreground="#444" Margin="0,0,0,4"/>
-                <ComboBox x:Name="CurrencyComboBox" Width="340" Height="36" FontSize="15" Margin="0,0,0,24"/>
-                <Border Background="#F7D90F" CornerRadius="10" Padding="16" Margin="0,0,0,0" HorizontalAlignment="Center">
+                
+                <!-- Döviz Hesapları -->
+                <TextBlock Text="Döviz Hesaplarınız" FontSize="16" FontWeight="SemiBold" Foreground="#444" Margin="0,0,0,12" HorizontalAlignment="Center"/>
+                <ComboBox x:Name="CurrencyComboBox" Width="340" Height="36" FontSize="15" Margin="0,0,0,16"/>
+                
+                <!-- Seçili Döviz Bakiye -->
+                <Border Background="#F7D90F" Padding="16" Margin="0,0,0,16" CornerRadius="8">
                     <StackPanel>
-                        <TextBlock Text="Karşılığı" FontSize="14" Foreground="#888" HorizontalAlignment="Center"/>
-                        <TextBlock x:Name="ResultTextBlock" Text="0,00" FontSize="28" FontWeight="Bold" Foreground="#222" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Seçili Döviz Bakiye" FontSize="14" Foreground="#666" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="SelectedCurrencyBalanceText" Text="0,00" FontSize="20" FontWeight="Bold" Foreground="#222" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Border>
             </StackPanel>

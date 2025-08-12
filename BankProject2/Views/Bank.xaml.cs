@@ -15,7 +15,7 @@ namespace BankProject2
         {
             InitializeComponent();
             _customerId = customerId;
-            //EnsureVadesizAccountExists(_customerId);
+            EnsureVadesizAccountExists(_customerId);
             LoadAccountData();
         }
         
@@ -223,99 +223,131 @@ namespace BankProject2
             window.ShowDialog();
         }
 
-        private int GetCustomerId() => _customerId;
-
-        private void VadeliBoz_Click(object sender, RoutedEventArgs e)
+        // Vadeli bozma butonu için boş handler, isteğe göre burada bozdurma akışı açılır
+        private void VadeliBoz_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             using (var context = new BankDbContext())
             {
-                var senderAccount = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Vadeli");
+                var vadeliHesap = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Vadeli");
+                if (vadeliHesap == null)
+                {
+                    MessageBox.Show("Vadeli hesabınız bulunmamaktadır.");
+                    return;
+                }
 
-                    if (senderAccount.MaturityDate.HasValue && senderAccount.MaturityDate.Value < DateTime.Now)
+                // IsBroken null olabilir, bu yüzden null kontrolü yapıyoruz
+                if (vadeliHesap.IsBroken == true)
+                {
+                    MessageBox.Show("Vadeli hesabınız zaten bozulmuş.");
+                    return;
+                }
+
+                var result = MessageBox.Show(
+                    $"Vadeli hesabınızı bozmak istediğinizden emin misiniz?\n\n" +
+                    $"Ana Para: {vadeliHesap.PrincipalAmount:N2} TL\n" +
+                    $"Biriken Faiz: {vadeliHesap.AccruedInterest:N2} TL\n" +
+                    $"Toplam: {(vadeliHesap.PrincipalAmount + vadeliHesap.AccruedInterest):N2} TL\n\n" +
+                    $"Bozma işlemi sonrası faiz yanacak ve sadece ana para vadesiz hesabınıza aktarılacaktır.",
+                    "Vadeli Hesap Bozma",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    // Vadesiz hesabı bul
+                    var vadesizHesap = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Vadesiz");
+                    if (vadesizHesap == null)
                     {
-                        var result = MessageBox.Show($"Vade bitiş tarihi: {senderAccount.MaturityDate:dd.MM.yyyy}\nFaiziniz yanacak, vadeyi bozmak istiyor musunuz?", "Vadeli Hesap Uyarı", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                        if (result != MessageBoxResult.Yes)
-                            return;
-                        // Faiz silinir, ana para vadesize aktarılır
-                        var vadesiz = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Vadesiz");
-                        if (vadesiz == null)
-                        {
-                            MessageBox.Show("Vadesiz hesabınız bulunamadı, işlem iptal edildi.");
-                            return;
-                        }
-
-                        if(vadesiz.Balance == 0)
-                        {
-                            MessageBox.Show("Vadesiz hesabınız yok");
-                        }
-
-                        vadesiz.Balance += senderAccount.PrincipalAmount ?? 0;
-                        senderAccount.Balance = 0;
-                        senderAccount.PrincipalAmount = 0;
-                        senderAccount.AccruedInterest = 0;
-                        senderAccount.IsBroken = true;
-                        context.transactions.Add(new Transactions
-                        {
-                            TransactionType = "Vadeli Bozma",
-                            TransactionDate = DateTime.Now,
-                            Amount = senderAccount.Balance,
-                            FromAccountID = senderAccount.AccountID,
-                            ToAccountID = vadesiz.AccountID,
-                            Description = "Vadeli hesap bozuldu, ana para vadesize aktarıldı."
-                        });
-                        context.SaveChanges();
-                        senderAccount = vadesiz; // Transfer artık vadesizden devam edecek
+                        MessageBox.Show("Vadesiz hesabınız bulunamadı.");
+                        return;
                     }
-                //}
+
+                    // Ana parayı vadesiz hesaba aktar
+                    vadesizHesap.Balance += vadeliHesap.PrincipalAmount ?? 0;
+
+                    // Vadeli hesabı boz
+                    vadeliHesap.IsBroken = true;
+                    vadeliHesap.Balance = 0;
+                    vadeliHesap.AccruedInterest = 0;
+
+                    // İşlem kaydı oluştur
+                    context.transactions.Add(new Transactions
+                    {
+                        TransactionType = "Vadeli Hesap Bozma",
+                        TransactionDate = DateTime.Now,
+                        Amount = vadeliHesap.PrincipalAmount ?? 0,
+                        FromAccountID = vadeliHesap.AccountID,
+                        ToAccountID = vadesizHesap.AccountID,
+                        Description = $"Vadeli hesap bozuldu. Ana para: {vadeliHesap.PrincipalAmount:N2} TL, Faiz yandı."
+                    });
+
+                    context.SaveChanges();
+                    MessageBox.Show("Vadeli hesabınız başarıyla bozuldu. Ana para vadesiz hesabınıza aktarıldı.");
+                    LoadAccountData();
+                }
             }
         }
 
-        //private void OpenSellBuyPageButton_Click(object sender, System.Windows.RoutedEventArgs e)
-        //{
-        //    using (var context = new BankDbContext())
-        //    {
-        //        var dovizHesap = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Döviz");
+        private int GetCustomerId() => _customerId;
 
-        //        if (dovizHesap == null)
-        //        {
-        //            MessageBox.Show("Lütfen önce Döviz Hesabı oluşturunuz.");
-        //            return;
-        //        }
+        private void OpenSellBuyPageButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            // Döviz sayfası gerekli hesapları işlemler sırasında açacak
+            MainWindow mainWindow = Window.GetWindow(this) as MainWindow;
+            mainWindow?.Sell_Buy_Click(sender, e);
+        }
 
-        //        else
-        //        {
-        //            MainWindow mainWindow = Window.GetWindow(this) as MainWindow;
+        private void DovizHesapOlusturButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            using (var context = new BankDbContext())
+            {
+                // Döviz hesabı zaten var mı kontrol et
+                var existingAccount = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Döviz");
+                
+                if (existingAccount != null)
+                {
+                    MessageBox.Show("Zaten bir Döviz Hesabınız var.");
+                    return;
+                }
+                // Yeni döviz hesabı oluştur
+                var newAccount = new Accounts
+                {
+                    CustomerID = _customerId,
+                    AccountType = "Döviz",
+                    Balance = 0,
+                    
+                };
+                
+                context.accounts.Add(newAccount);
+                context.SaveChanges();
+                MessageBox.Show("Döviz Hesabı başarıyla oluşturuldu.");
+            }
+        }
 
-        //            mainWindow.Sell_Buy_Click(sender, e);
-        //        }
-        //    }
-        //}
+        private void EnsureVadesizAccountExists(int customerId)
+        {
+            using (var context = new BankDbContext())
+            {
+                var vadesiz = context.accounts.FirstOrDefault(a => a.CustomerID == customerId && a.AccountType == "Vadesiz");
+                if (vadesiz == null)
+                {
+                    var newVadesiz = new Accounts
+                    {
+                        CustomerID = customerId,
+                        AccountType = "Vadesiz",
+                        Balance = 0,
+                        IBAN = GenerateSimpleIban()
+                    };
+                    context.accounts.Add(newVadesiz);
+                    context.SaveChanges();
+                }
+            }
+        }
 
-        //private void DovizHesapOlusturButton_Click(object sender, System.Windows.RoutedEventArgs e)
-        //{
-        //    using (var context = new BankDbContext())
-        //    {
-        //        // Döviz hesabı zaten var mı kontrol et
-        //        var existingAccount = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Döviz");
-
-        //        if (existingAccount != null)
-        //        {
-        //            MessageBox.Show("Zaten bir Döviz Hesabınız var.");
-        //            return;
-        //        }
-        //        // Yeni döviz hesabı oluştur
-        //        var newAccount = new Accounts
-        //        {
-        //            CustomerID = _customerId,
-        //            AccountType = "Döviz",
-        //            Balance = 0,
-
-        //        };
-
-        //        context.accounts.Add(newAccount);
-        //        context.SaveChanges();
-        //        MessageBox.Show("Döviz Hesabı başarıyla oluşturuldu.");
-        //    }
-        //}
+        private string GenerateSimpleIban()
+        {
+            var random = new Random();
+            return "TR" + random.Next(100000000, 999999999).ToString();
+        }
     }
 }

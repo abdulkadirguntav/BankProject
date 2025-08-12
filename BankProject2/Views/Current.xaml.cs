@@ -11,18 +11,23 @@ namespace BankProject2
         public CurrentPage()
         {
             InitializeComponent();
+            LoadRates();
+        }
 
+        private async void LoadRates()
+        {
             try
             {
+                // Önce güncel verileri çek
+                await App.FetchAndSaveExchangeRatesAsync();
+
+                // Sonra veritabanından oku
                 using (var context = new BankDbContext())
                 {
                     var rates = context.currency
-                        .OrderByDescending(c => c.CurrencyDate)
                         .GroupBy(c => c.CurrencyCode)
-                        .Select(g => g.First())
+                        .Select(g => g.OrderByDescending(x => x.CurrencyDate).FirstOrDefault())
                         .ToList();
-
-                    //MessageBox.Show($"Kayıt sayısı: {rates.Count}");
 
                     dataGridRates.ItemsSource = rates;
                 }
@@ -33,4 +38,6 @@ namespace BankProject2
             }
         }
     }
+
+
 }

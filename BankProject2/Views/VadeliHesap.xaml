@@ -38,6 +38,14 @@
                 <TextBlock Text="Vadeli Hesap İşlemleri" FontSize="28" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
             </StackPanel>
 
+            <!-- Vadesiz Hesap Bakiye -->
+            <Border Background="#E8F5E8" Padding="20" Margin="0,0,0,20" CornerRadius="8">
+                <StackPanel>
+                    <TextBlock Text="Vadesiz Hesap Bakiye" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="VadesizBalanceText" Text="0,00 TL" FontSize="24" FontWeight="Bold" Foreground="#27AE60" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
             <!-- Mevcut Vadeli Hesap Bilgileri -->
             <Border Background="#F8F9FA" Padding="20" Margin="0,0,0,20" CornerRadius="8">
                 <StackPanel>
