@@ -92,7 +92,6 @@
                             </StackPanel>
                         </Border>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,18" >
-                            <Button Content="Vadeli Boz" Width="150" Height="40" Background="#F7D90F" Foreground="#222" FontWeight="SemiBold" BorderThickness="0" Margin="0,0,16,0" Cursor="Hand" Click="VadeliBoz_Click"/>
                             <Button Content="Vadeli Hesap" Width="150" Height="40" Background="#222" Foreground="#fff" FontWeight="SemiBold" BorderThickness="0" Cursor="Hand" Click="VadeliHesapButton_Click"/>
                         </StackPanel>
                         <TextBlock Text="İşlem Geçmişi" FontSize="16" FontWeight="SemiBold" Margin="16,16,0,8" HorizontalAlignment="Center"/>

@@ -64,6 +64,7 @@
                     </Style>
                 </StackPanel.Resources>
                 <Button Content="🏠  Ana Sayfa" Click="Home_Click"/>
+                <Button Content="📝  Kayıt Ol" Click="Register_Click"/>
                 <Button Content="🏦  Banka" Click="Banka_Click"/>
                 <Button Content="💳  Kredi Kart" Click="CreditCard_Click"/>
                 <Button Content="💱  Döviz" Click="Currency_Click"/>

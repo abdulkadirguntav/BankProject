@@ -52,10 +52,21 @@ namespace BankProject2
                 }
 
                 // Vadeli hesap
-                var vadeli = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Vadeli");
+                var vadeli = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Vadeli" && a.IsBroken != true);
                 var vadeliBalanceText = this.FindName("VadeliBalanceText") as TextBlock;
                 if (vadeliBalanceText != null)
-                    vadeliBalanceText.Text = vadeli != null ? vadeli.Balance.ToString("N2") + " TL" : "-";
+                {
+                    if (vadeli != null)
+                    {
+                        // Vadeli hesap bakiye = ana para + biriken faiz
+                        float totalBalance = (vadeli.PrincipalAmount ?? 0) + (vadeli.AccruedInterest ?? 0);
+                        vadeliBalanceText.Text = totalBalance.ToString("N2") + " TL";
+                    }
+                    else
+                    {
+                        vadeliBalanceText.Text = "-";
+                    }
+                }
                 var vadeliTransGrid = this.FindName("VadeliTransactionDataGrid") as DataGrid;
                 if (vadeliTransGrid != null)
                 {
@@ -213,79 +224,15 @@ namespace BankProject2
             var window = new System.Windows.Window
             {
                 Content = new VadeliHesap(_customerId),
-                Width = 600,
-                Height = 700,
-                Title = "Vadeli Hesap İşlemleri"
+                Width = 800,
+                Height = 800,
+                Title = "Vadeli Hesap İşlemleri",
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
             
             // Vadeli hesap penceresi kapandığında bakiyeleri yenile
             window.Closed += (s, args) => LoadAccountData();
             window.ShowDialog();
-        }
-
-        // Vadeli bozma butonu için boş handler, isteğe göre burada bozdurma akışı açılır
-        private void VadeliBoz_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            using (var context = new BankDbContext())
-            {
-                var vadeliHesap = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Vadeli");
-                if (vadeliHesap == null)
-                {
-                    MessageBox.Show("Vadeli hesabınız bulunmamaktadır.");
-                    return;
-                }
-
-                // IsBroken null olabilir, bu yüzden null kontrolü yapıyoruz
-                if (vadeliHesap.IsBroken == true)
-                {
-                    MessageBox.Show("Vadeli hesabınız zaten bozulmuş.");
-                    return;
-                }
-
-                var result = MessageBox.Show(
-                    $"Vadeli hesabınızı bozmak istediğinizden emin misiniz?\n\n" +
-                    $"Ana Para: {vadeliHesap.PrincipalAmount:N2} TL\n" +
-                    $"Biriken Faiz: {vadeliHesap.AccruedInterest:N2} TL\n" +
-                    $"Toplam: {(vadeliHesap.PrincipalAmount + vadeliHesap.AccruedInterest):N2} TL\n\n" +
-                    $"Bozma işlemi sonrası faiz yanacak ve sadece ana para vadesiz hesabınıza aktarılacaktır.",
-                    "Vadeli Hesap Bozma",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    // Vadesiz hesabı bul
-                    var vadesizHesap = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Vadesiz");
-                    if (vadesizHesap == null)
-                    {
-                        MessageBox.Show("Vadesiz hesabınız bulunamadı.");
-                        return;
-                    }
-
-                    // Ana parayı vadesiz hesaba aktar
-                    vadesizHesap.Balance += vadeliHesap.PrincipalAmount ?? 0;
-
-                    // Vadeli hesabı boz
-                    vadeliHesap.IsBroken = true;
-                    vadeliHesap.Balance = 0;
-                    vadeliHesap.AccruedInterest = 0;
-
-                    // İşlem kaydı oluştur
-                    context.transactions.Add(new Transactions
-                    {
-                        TransactionType = "Vadeli Hesap Bozma",
-                        TransactionDate = DateTime.Now,
-                        Amount = vadeliHesap.PrincipalAmount ?? 0,
-                        FromAccountID = vadeliHesap.AccountID,
-                        ToAccountID = vadesizHesap.AccountID,
-                        Description = $"Vadeli hesap bozuldu. Ana para: {vadeliHesap.PrincipalAmount:N2} TL, Faiz yandı."
-                    });
-
-                    context.SaveChanges();
-                    MessageBox.Show("Vadeli hesabınız başarıyla bozuldu. Ana para vadesiz hesabınıza aktarıldı.");
-                    LoadAccountData();
-                }
-            }
         }
 
         private int GetCustomerId() => _customerId;
