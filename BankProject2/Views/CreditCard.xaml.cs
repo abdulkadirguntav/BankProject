@@ -25,9 +25,9 @@ namespace BankProject2
                 {
                     var limitText = this.FindName("LimitText") as TextBlock;
                     var debtText = this.FindName("DebtText") as TextBlock;
-                    float kullanilabilirLimit = creditCard.Limit - creditCard.CurrentDebt;
+                    float kullanilabilirLimit = (float)(creditCard.Limit - creditCard.CurrentDebt);
                     if (limitText != null) limitText.Text = kullanilabilirLimit.ToString("N2") + " TL";
-                    if (debtText != null) debtText.Text = creditCard.CurrentDebt.ToString("N2") + " TL";
+                    if (debtText != null) debtText.Text = $"{(creditCard.CurrentDebt ?? 0f):N2} TL";
                 }
                 if (creditCard != null)
                 {

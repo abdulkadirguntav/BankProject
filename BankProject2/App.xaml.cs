@@ -39,7 +39,7 @@ namespace BankProject2
 
                 // XML'in tarihini al
                 string dateStr = doc.Root.Attribute("Date").Value; // "08/12/2025" formatında gelir
-                DateTime xmlDate = DateTime.ParseExact(dateStr, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                DateTime xmlDate = DateTime.ParseExact(dateStr, "MM/dd/yyyy", CultureInfo.InvariantCulture);
 
                 using (var context = new BankDbContext())
                 {

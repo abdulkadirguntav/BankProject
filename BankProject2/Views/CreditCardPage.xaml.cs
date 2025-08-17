@@ -24,9 +24,9 @@ namespace BankProject2.Views
                 var creditCard = context.creditCard.FirstOrDefault(c => c.CustomerID == customerId);
                 if (creditCard != null)
                 {
-                    float kullanilabilirLimit = creditCard.Limit - creditCard.CurrentDebt;
+                    float kullanilabilirLimit = (float)(creditCard.Limit - creditCard.CurrentDebt);
                     LimitText.Text = kullanilabilirLimit.ToString("N2") + " TL";
-                    DebtText.Text = creditCard.CurrentDebt.ToString("N2") + " TL";
+                    DebtText.Text = $"{(creditCard.CurrentDebt ?? 0f):N2} TL";
 
                     var transactions = context.transactions
                         .Where(t => t.CreditCardID == creditCard.CreditCardID)

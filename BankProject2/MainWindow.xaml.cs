@@ -142,22 +142,8 @@ namespace BankProject2
             };
             panel.Children.Add(passwordBox);
 
-            // Giriş Butonu
-            var loginBtn = new Button
-            {
-                Content = "Giriş Yap",
-                Width = 180,
-                Height = 38,
-                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F7D90F")),
-                Foreground = Brushes.Black,
-                FontWeight = FontWeights.SemiBold,
-                BorderThickness = new Thickness(0),
-                Cursor = Cursors.Hand,
-                Margin = new Thickness(0, 10, 0, 0),
-                HorizontalAlignment = HorizontalAlignment.Center
-            };
-
-            loginBtn.Click += (s, e) =>
+            // Giriş fonksiyonu
+            Action performLogin = () =>
             {
                 string phone = phoneBox.Text;
                 string password = passwordBox.Password;
@@ -176,6 +162,40 @@ namespace BankProject2
                     }
                 }
             };
+
+            // Enter tuşu ile giriş yapma
+            phoneBox.KeyDown += (s, e) =>
+            {
+                if (e.Key == Key.Enter)
+                {
+                    performLogin();
+                }
+            };
+
+            passwordBox.KeyDown += (s, e) =>
+            {
+                if (e.Key == Key.Enter)
+                {
+                    performLogin();
+                }
+            };
+
+            // Giriş Butonu
+            var loginBtn = new Button
+            {
+                Content = "Giriş Yap",
+                Width = 180,
+                Height = 38,
+                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F7D90F")),
+                Foreground = Brushes.Black,
+                FontWeight = FontWeights.SemiBold,
+                BorderThickness = new Thickness(0),
+                Cursor = Cursors.Hand,
+                Margin = new Thickness(0, 10, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+
+            loginBtn.Click += (s, e) => performLogin();
             panel.Children.Add(loginBtn);
 
             MainContent.Content = panel;
@@ -492,11 +512,11 @@ namespace BankProject2
         //    return cardNumber;
         //}
 
-        private string GenerateCVV()
-        {
-            Random random = new Random();
-            return random.Next(100, 1000).ToString();
-        }
+        //private string GenerateCVV()
+        //{
+        //    Random random = new Random();
+        //    return random.Next(100, 1000).ToString();
+        //}
 
         private int CalculateRiskScore(float monthlyIncome)
         {

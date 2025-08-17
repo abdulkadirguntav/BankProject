@@ -21,7 +21,7 @@ namespace BankProject2.Views
             {
                 var card = context.creditCard.FirstOrDefault(c => c.CustomerID == customerId);
                 if (card != null)
-                    DebtText.Text = card.CurrentDebt.ToString("N2") + " TL";
+                    DebtText.Text = $"{(card.CurrentDebt ?? 0f):N2} TL";
             }
         }
 

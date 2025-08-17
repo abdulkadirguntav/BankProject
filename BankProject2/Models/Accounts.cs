@@ -12,7 +12,7 @@ namespace BankProject2.Models
         [Key]
         public int AccountID { get; set; }
         public string AccountType { get; set; }
-        public float Balance { get; set; }
+        public float? Balance { get; set; }
         public string IBAN { get; set; } // Hesap IBAN'ı
         public int? CurrencyID { get; set; } // Döviz hesabı için
         public DateTime? StartDate { get; set; } // Vadeli hesap için başlangıç tarihi

@@ -39,7 +39,7 @@ namespace BankProject2.Views
                     return;
                 }
 
-                float newLimit = card.Limit + amount;
+                float newLimit = (float)(card.Limit + amount);
                 if (newLimit < 0)
                 {
                     MessageBox.Show("Limit sıfırın altına inemez.");

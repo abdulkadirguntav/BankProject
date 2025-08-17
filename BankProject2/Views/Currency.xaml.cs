@@ -10,6 +10,7 @@ namespace BankProject2
     public partial class CurrencyPage : UserControl
     {
         private int customerId;
+
         public CurrencyPage(int customerId)
         {
             InitializeComponent();
@@ -18,7 +19,7 @@ namespace BankProject2
             CurrencyComboBox.SelectionChanged += AssetOrCurrencyChanged;
         }
 
-        private Dictionary<string, double> currencyRates = new Dictionary<string, double>();
+        private Dictionary<string, double?> currencyRates = new Dictionary<string, double?>();
 
         private async void UpdateCurrencyRates()
         {

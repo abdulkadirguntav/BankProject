@@ -27,8 +27,8 @@ namespace BankProject2
                 
                 var vadesiz = context.accounts.FirstOrDefault(a => a.CustomerID == customerId && a.AccountType == "Vadesiz");
                 var vadeli = context.accounts.FirstOrDefault(a => a.CustomerID == customerId && a.AccountType == "Vadeli");
-                VadesizBalanceText.Text = vadesiz != null ? vadesiz.Balance.ToString("N2") + " TL" : "-";
-                VadeliBalanceText.Text = vadeli != null ? vadeli.Balance.ToString("N2") + " TL" : "-";
+                VadesizBalanceText.Text = vadesiz != null ? $"{(vadesiz.Balance ?? 0f):N2} TL" : "-";
+                VadeliBalanceText.Text = vadeli != null ? $"{(vadeli.Balance ?? 0f):N2} TL" : "-";
             }
         }
 
@@ -172,7 +172,7 @@ namespace BankProject2
                         {
                             TransactionType = "Vadeli Bozma",
                             TransactionDate = DateTime.Now,
-                            Amount = senderAccount.Balance,
+                            Amount = (float)senderAccount.Balance,
                             FromAccountID = senderAccount.AccountID,
                             ToAccountID = vadesiz.AccountID,
                             Description = "Vadeli hesap bozuldu, ana para vadesize aktarıldı."

@@ -13,7 +13,7 @@ namespace BankProject2.Models
         public int CurrencyID { get; set; }
         public string CurrencyCode { get; set; }
         public DateTime CurrencyDate { get; set; }
-        public double RateToTRY { get; set; }
+        public double? RateToTRY { get; set; }
     }
 }
     

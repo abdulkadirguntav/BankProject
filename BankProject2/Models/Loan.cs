@@ -10,9 +10,9 @@ namespace BankProject2.Models
     public class Loan
     {
         [Key]
+        public int LoanID { get; set; }
         public float InterestRate { get; set; }
         public float Principal { get; set; }
-        public int LoanID { get; set; }
         public int TermMonths { get; set; }
         public string LoanStatus { get; set; }
     }

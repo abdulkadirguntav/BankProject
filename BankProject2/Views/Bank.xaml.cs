@@ -33,7 +33,7 @@ namespace BankProject2
                 var vadesiz = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Vadesiz");
                 var vadesizBalanceText = this.FindName("VadesizBalanceText") as TextBlock;
                 if (vadesizBalanceText != null)
-                    vadesizBalanceText.Text = vadesiz != null ? vadesiz.Balance.ToString("N2") + " TL" : "-";
+                    vadesizBalanceText.Text = vadesiz != null ? $"{(vadesiz.Balance ?? 0f):N2} TL" : "-";
                 var vadesizTransGrid = this.FindName("VadesizTransactionDataGrid") as DataGrid;
                 if (vadesizTransGrid != null)
                 {
@@ -41,7 +41,7 @@ namespace BankProject2
                     {
                         var vadesizTrans = context.transactions
                             .Where(t => t.FromAccountID == vadesiz.AccountID || t.ToAccountID == vadesiz.AccountID)
-                            .OrderByDescending(t => t.TransactionDate)
+                            .OrderByDescending(t => t.TransactionDate)  
                             .ToList();
                         vadesizTransGrid.ItemsSource = vadesizTrans;
                     }
@@ -179,30 +179,35 @@ namespace BankProject2
             if (vadesizHesap == null)
                 return;
 
-            // Bugünün tarihi
             DateTime today = DateTime.Now;
-            
-            // Basit maaş yatırma kontrolü (her gün kontrol et, gerçek uygulamada daha karmaşık olabilir)
-            // Maaş yatırma günü kontrolü (varsayılan 15. gün)
+
+            // Bugün zaten maaş yatırılmış mı kontrol et
+            bool alreadyPaidToday = context.transactions
+                .Any(t => t.TransactionType == "Maaş Yatırma"
+                          && t.ToAccountID == vadesizHesap.AccountID
+                          && t.TransactionDate.Date == today.Date);
+
+            if (alreadyPaidToday)
+                return;
+
             if (today.Day == 15) // Sabit maaş günü
             {
-                // Maaş yatır
                 vadesizHesap.Balance += customer.MonthlyIncome;
-                
-                // İşlem kaydı oluştur
+
                 context.transactions.Add(new Transactions
                 {
                     TransactionType = "Maaş Yatırma",
                     TransactionDate = today,
                     Amount = customer.MonthlyIncome,
-                    FromAccountID = null, // Banka tarafından yatırılıyor
+                    FromAccountID = null,
                     ToAccountID = vadesizHesap.AccountID,
                     Description = $"Maaş yatırıldı: {customer.MonthlyIncome:N2} TL"
                 });
-                
+
                 context.SaveChanges();
             }
         }
+
 
         private void ParaGonderButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {

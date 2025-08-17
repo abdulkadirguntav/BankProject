@@ -13,10 +13,19 @@ namespace BankProject2.Data
         public DbSet<LoanPayment> loanApplication { get; set; }
         public DbSet<CreditCard> creditCard { get; set; }
 
+        // Normal constructor
+        public BankDbContext() { }
+
+        // Testler için özel constructor
+        public BankDbContext(DbContextOptions<BankDbContext> options) : base(options) { }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = "Server=localhost;Database=bank;Uid=root;Pwd=Retro1320;";
-            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            if (!optionsBuilder.IsConfigured) // Testte override edilirse burası çalışmaz
+            {
+                string connectionString = "Server=localhost;Database=bank;Uid=root;Pwd=Retro1320;";
+                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,5 +38,5 @@ namespace BankProject2.Data
                 .ValueGeneratedOnAdd();
         }
     }
+
 }
- 

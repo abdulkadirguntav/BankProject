@@ -4,29 +4,37 @@ using System.Linq;
 using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System;
+using System.Windows;
 
 namespace BankProject2
 {
     public partial class Sell_BuyPage : UserControl
     {
         private readonly int _customerId;
+
+        // Kurları double (nullable değil) olarak tutuyoruz
         private Dictionary<string, double> currencyRates = new Dictionary<string, double>();
+
         private bool _isBuyAmountChanging = false;
         private bool _isBuyTotalChanging = false;
         private bool _isSellAmountChanging = false;
         private bool _isSellTotalChanging = false;
-        private const double CommissionRate = 0.001; // %0.1 komisyon
-        private const double MinTradeAmountBase = 1.0; // 1 birim döviz altı işlemi engelle
+
+        private const double CommissionRate = 0.001;    // %0.1 komisyonl
 
         public Sell_BuyPage(int customerId)
         {
             InitializeComponent();
             _customerId = customerId;
+
             LoadCurrencyRates();
+
             BuyAmountTextBox.TextChanged += BuyAmountTextBox_TextChanged;
             BuyTotalTextBox.TextChanged += BuyTotalTextBox_TextChanged;
             BuyAmountTextBox.PreviewTextInput += AmountTextBox_PreviewTextInput;
             BuyTotalTextBox.PreviewTextInput += AmountTextBox_PreviewTextInput;
+
             SellAmountTextBox.TextChanged += SellAmountTextBox_TextChanged;
             SellTotalTextBox.TextChanged += SellTotalTextBox_TextChanged;
             SellAmountTextBox.PreviewTextInput += AmountTextBox_PreviewTextInput;
@@ -42,13 +50,30 @@ namespace BankProject2
                     .GroupBy(c => c.CurrencyCode)
                     .Select(g => g.First())
                     .ToList();
-                currencyRates = rates.ToDictionary(c => c.CurrencyCode, c => c.RateToTRY);
-                BuyCurrencyComboBox.ItemsSource = currencyRates.Keys;
-                BuyCurrencyComboBox.SelectedIndex = 0;
-                BuyCurrencyComboBox.SelectionChanged += (s, e) => { UpdateCurrencyRateText(BuyCurrencyComboBox, BuyCurrencyRateText); UpdateSelectedBalances(); BuyAmountTextBox.Text = BuyTotalTextBox.Text = string.Empty; };
+
+                // RateToTRY double? ise null’ları 0’a düşür
+                currencyRates = rates.ToDictionary(c => c.CurrencyCode, c => (c.RateToTRY ?? 0d));
+
+                // Alım combobox
+                BuyCurrencyComboBox.ItemsSource = currencyRates.Keys.ToList();
+                BuyCurrencyComboBox.SelectedIndex = BuyCurrencyComboBox.Items.Count > 0 ? 0 : -1;
+                BuyCurrencyComboBox.SelectionChanged += (s, e) =>
+                {
+                    UpdateCurrencyRateText(BuyCurrencyComboBox, BuyCurrencyRateText);
+                    UpdateSelectedBalances();
+                    BuyAmountTextBox.Text = BuyTotalTextBox.Text = string.Empty;
+                };
+
+                // Satış combobox (kullanıcının sahip oldukları)
                 SellCurrencyComboBox.ItemsSource = GetUserOwnedCurrencies(context);
                 SellCurrencyComboBox.SelectedIndex = SellCurrencyComboBox.Items.Count > 0 ? 0 : -1;
-                SellCurrencyComboBox.SelectionChanged += (s, e) => { UpdateCurrencyRateText(SellCurrencyComboBox, SellCurrencyRateText); UpdateSelectedBalances(); SellAmountTextBox.Text = SellTotalTextBox.Text = string.Empty; };
+                SellCurrencyComboBox.SelectionChanged += (s, e) =>
+                {
+                    UpdateCurrencyRateText(SellCurrencyComboBox, SellCurrencyRateText);
+                    UpdateSelectedBalances();
+                    SellAmountTextBox.Text = SellTotalTextBox.Text = string.Empty;
+                };
+
                 UpdateCurrencyRateText(BuyCurrencyComboBox, BuyCurrencyRateText);
                 UpdateCurrencyRateText(SellCurrencyComboBox, SellCurrencyRateText);
                 UpdateSelectedBalances();
@@ -65,17 +90,20 @@ namespace BankProject2
             return codes;
         }
 
-        // Al sekmesi: Döviz miktarı değişirse TL hesapla
+        // Al: Döviz miktarı değişti → TL hesapla
         private void BuyAmountTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (_isBuyTotalChanging) return;
             _isBuyAmountChanging = true;
-            if (BuyCurrencyComboBox.SelectedItem is string selectedCurrency && currencyRates.TryGetValue(selectedCurrency, out double rate))
+
+            if (BuyCurrencyComboBox.SelectedItem is string code && TryGetRate(code, out var rate))
             {
                 if (double.TryParse(BuyAmountTextBox.Text.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out double amount))
                 {
-                    BuyTotalTextBox.Text = (amount * rate).ToString("N2", CultureInfo.CurrentCulture);
-                    var fee = (amount * rate) * CommissionRate;
+                    double total = amount * rate;
+                    double fee = total * CommissionRate;
+
+                    BuyTotalTextBox.Text = total.ToString("N2", CultureInfo.CurrentCulture);
                     BuyFeeText.Text = $"Komisyon: {fee.ToString("N2", CultureInfo.CurrentCulture)} TL";
                 }
                 else
@@ -84,19 +112,24 @@ namespace BankProject2
                     BuyFeeText.Text = "Komisyon: 0,00 TL";
                 }
             }
+
             _isBuyAmountChanging = false;
         }
-        // Al sekmesi: TL değişirse döviz hesapla
+
+        // Al: TL değişti → döviz hesapla
         private void BuyTotalTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (_isBuyAmountChanging) return;
             _isBuyTotalChanging = true;
-            if (BuyCurrencyComboBox.SelectedItem is string selectedCurrency && currencyRates.TryGetValue(selectedCurrency, out double rate))
+
+            if (BuyCurrencyComboBox.SelectedItem is string code && TryGetRate(code, out var rate))
             {
                 if (double.TryParse(BuyTotalTextBox.Text.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out double total))
                 {
-                    BuyAmountTextBox.Text = (total / rate).ToString("N4", CultureInfo.CurrentCulture);
-                    var fee = total * CommissionRate;
+                    double amount = rate == 0 ? 0 : total / rate;
+                    double fee = total * CommissionRate;
+
+                    BuyAmountTextBox.Text = amount.ToString("N4", CultureInfo.CurrentCulture);
                     BuyFeeText.Text = $"Komisyon: {fee.ToString("N2", CultureInfo.CurrentCulture)} TL";
                 }
                 else
@@ -105,19 +138,24 @@ namespace BankProject2
                     BuyFeeText.Text = "Komisyon: 0,00 TL";
                 }
             }
+
             _isBuyTotalChanging = false;
         }
-        // Sat sekmesi: Döviz miktarı değişirse TL hesapla
+
+        // Sat: Döviz miktarı değişti → TL hesapla
         private void SellAmountTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (_isSellTotalChanging) return;
             _isSellAmountChanging = true;
-            if (SellCurrencyComboBox.SelectedItem is string selectedCurrency && currencyRates.TryGetValue(selectedCurrency, out double rate))
+
+            if (SellCurrencyComboBox.SelectedItem is string code && TryGetRate(code, out var rate))
             {
                 if (double.TryParse(SellAmountTextBox.Text.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out double amount))
                 {
-                    SellTotalTextBox.Text = (amount * rate).ToString("N2", CultureInfo.CurrentCulture);
-                    var fee = (amount * rate) * CommissionRate;
+                    double total = amount * rate;
+                    double fee = total * CommissionRate;
+
+                    SellTotalTextBox.Text = total.ToString("N2", CultureInfo.CurrentCulture);
                     SellFeeText.Text = $"Komisyon: {fee.ToString("N2", CultureInfo.CurrentCulture)} TL";
                 }
                 else
@@ -126,19 +164,24 @@ namespace BankProject2
                     SellFeeText.Text = "Komisyon: 0,00 TL";
                 }
             }
+
             _isSellAmountChanging = false;
         }
-        // Sat sekmesi: TL değişirse döviz hesapla
+
+        // Sat: TL değişti → döviz hesapla
         private void SellTotalTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (_isSellAmountChanging) return;
             _isSellTotalChanging = true;
-            if (SellCurrencyComboBox.SelectedItem is string selectedCurrency && currencyRates.TryGetValue(selectedCurrency, out double rate))
+
+            if (SellCurrencyComboBox.SelectedItem is string code && TryGetRate(code, out var rate))
             {
                 if (double.TryParse(SellTotalTextBox.Text.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out double total))
                 {
-                    SellAmountTextBox.Text = (total / rate).ToString("N4", CultureInfo.CurrentCulture);
-                    var fee = total * CommissionRate;
+                    double amount = rate == 0 ? 0 : total / rate;
+                    double fee = total * CommissionRate;
+
+                    SellAmountTextBox.Text = amount.ToString("N4", CultureInfo.CurrentCulture);
                     SellFeeText.Text = $"Komisyon: {fee.ToString("N2", CultureInfo.CurrentCulture)} TL";
                 }
                 else
@@ -147,26 +190,41 @@ namespace BankProject2
                     SellFeeText.Text = "Komisyon: 0,00 TL";
                 }
             }
+
             _isSellTotalChanging = false;
         }
 
         private void UpdateCurrencyRateText(ComboBox combo, TextBlock rateText)
         {
-            if (combo.SelectedItem is string selectedCurrency && currencyRates.TryGetValue(selectedCurrency, out double rate))
+            if (combo?.SelectedItem is string code && TryGetRate(code, out var rate))
             {
-                rateText.Text = $"1 {selectedCurrency} = {rate.ToString("N2", CultureInfo.CurrentCulture)} TL";
+                rateText.Text = $"1 {code} = {rate.ToString("N2", CultureInfo.CurrentCulture)} TL";
             }
+            else
+            {
+                rateText.Text = "-";
+            }
+        }
+
+        private bool TryGetRate(string code, out double rate)
+        {
+            if (currencyRates.TryGetValue(code, out var r))
+            {
+                rate = r;
+                return true;
+            }
+            rate = 0;
+            return false;
         }
 
         private void AmountTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            // Sadece sayı ve virgül/nokta kabul et
+            // Sadece sayı ve virgül/nokta
             e.Handled = !IsTextAllowed(e.Text);
         }
 
         private static bool IsTextAllowed(string text)
         {
-            // Sadece rakam, nokta ve virgül
             foreach (char c in text)
             {
                 if (!char.IsDigit(c) && c != ',' && c != '.')
@@ -177,99 +235,91 @@ namespace BankProject2
 
         private void BuyButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (BuyCurrencyComboBox.SelectedItem is not string selectedCurrency || !currencyRates.TryGetValue(selectedCurrency, out double rate)) return;
+            if (BuyCurrencyComboBox.SelectedItem is not string code || !TryGetRate(code, out var rate)) return;
             if (!double.TryParse(BuyAmountTextBox.Text.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out double amount) || amount <= 0) return;
-            if (amount < MinTradeAmountBase) { System.Windows.MessageBox.Show($"Minimum işlem miktarı {MinTradeAmountBase} {selectedCurrency}"); return; }
+            //if (amount < MinTradeAmountBase) { MessageBox.Show($"Minimum işlem miktarı {MinTradeAmountBase} {code}"); return; }
 
             double tlCost = amount * rate;
             double fee = tlCost * CommissionRate;
-            BuyFeeText.Text = $"Komisyon: {fee.ToString("N2") } TL";
+            BuyFeeText.Text = $"Komisyon: {fee.ToString("N2", CultureInfo.CurrentCulture)} TL";
 
             using (var context = new BankDbContext())
             {
-                // Vadesiz TL hesabı
                 var vadesiz = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Vadesiz");
-                if (vadesiz == null) { System.Windows.MessageBox.Show("Vadesiz hesabınız bulunamadı."); return; }
-                double totalDebit = tlCost + fee;
-                if (vadesiz.Balance < (float)totalDebit) { System.Windows.MessageBox.Show("Yetersiz bakiye (TL)"); return; }
+                if (vadesiz == null) { MessageBox.Show("Vadesiz hesabınız bulunamadı."); return; }
 
-                // Döviz hesabı (yoksa aç). Hesap türünü 'Döviz-XXX' olarak tutuyoruz
-                var accountTypeCode = $"Döviz-{selectedCurrency}";
-                var dovizHesap = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == accountTypeCode);
-                if (dovizHesap == null)
+                double totalDebit = tlCost + fee;
+                if (vadesiz.Balance < (float)totalDebit) { MessageBox.Show("Yetersiz bakiye (TL)"); return; }
+
+                var accountTypeCode = $"Döviz-{code}";
+                var doviz = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == accountTypeCode);
+                if (doviz == null)
                 {
-                    dovizHesap = new Models.Accounts { CustomerID = _customerId, AccountType = accountTypeCode, Balance = 0, IBAN = GenerateSimpleIban() };
-                    context.accounts.Add(dovizHesap);
-                    // Önce hesap kaydını oluştur ki AccountID üretilebilsin
+                    doviz = new Models.Accounts { CustomerID = _customerId, AccountType = accountTypeCode, Balance = 0, IBAN = GenerateSimpleIban() };
+                    context.accounts.Add(doviz);
                     context.SaveChanges();
                 }
 
                 // Bakiye güncelle
                 vadesiz.Balance -= (float)totalDebit;
-                dovizHesap.Balance += (float)amount;
+                doviz.Balance += (float)amount;
 
-                // İşlemler
+                // İşlem kaydı
                 context.transactions.Add(new Models.Transactions
                 {
                     TransactionType = "FX-Buy",
-                    TransactionDate = System.DateTime.Now,
+                    TransactionDate = DateTime.Now,
                     Amount = (float)tlCost,
                     FromAccountID = vadesiz.AccountID,
-                    ToAccountID = dovizHesap.AccountID,
+                    ToAccountID = doviz.AccountID,
                     Fee = fee,
-                    Description = $"{amount:N4} {selectedCurrency} alım"
+                    Description = $"{amount.ToString("N4", CultureInfo.CurrentCulture)} {code} alım"
                 });
 
                 context.SaveChanges();
-                System.Windows.MessageBox.Show("Alım işlemi başarılı");
+                MessageBox.Show("Alım işlemi başarılı");
                 UpdateSelectedBalances();
             }
         }
 
         private void SellButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (SellCurrencyComboBox.SelectedItem is not string selectedCurrency || !currencyRates.TryGetValue(selectedCurrency, out double rate)) return;
+            if (SellCurrencyComboBox.SelectedItem is not string code || !TryGetRate(code, out var rate)) return;
             if (!double.TryParse(SellAmountTextBox.Text.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out double amount) || amount <= 0) return;
-            if (amount < MinTradeAmountBase) { System.Windows.MessageBox.Show($"Minimum işlem miktarı {MinTradeAmountBase} {selectedCurrency}"); return; }
+            //if (amount < MinTradeAmountBase) { MessageBox.Show($"Minimum işlem miktarı {MinTradeAmountBase} {code}"); return; }
 
             double tlProceeds = amount * rate;
             double fee = tlProceeds * CommissionRate;
-            SellFeeText.Text = $"Komisyon: {fee.ToString("N2")} TL";
+            SellFeeText.Text = $"Komisyon: {fee.ToString("N2", CultureInfo.CurrentCulture)} TL";
 
             using (var context = new BankDbContext())
             {
-                // Vadesiz TL hesabı
                 var vadesiz = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Vadesiz");
-                if (vadesiz == null) { System.Windows.MessageBox.Show("Vadesiz hesabınız bulunamadı."); return; }
+                if (vadesiz == null) { MessageBox.Show("Vadesiz hesabınız bulunamadı."); return; }
 
-                // Döviz hesabı
-                var accountTypeCode = $"Döviz-{selectedCurrency}";
-                var dovizHesap = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == accountTypeCode);
-                if (dovizHesap == null || dovizHesap.AccountID == 0)
-                {
-                    System.Windows.MessageBox.Show("Döviz hesabınız bulunamadı.");
-                    return;
-                }
-                if (dovizHesap.Balance < (float)amount) { System.Windows.MessageBox.Show("Yetersiz döviz bakiyesi"); return; }
+                var accountTypeCode = $"Döviz-{code}";
+                var doviz = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == accountTypeCode);
+                if (doviz == null || doviz.AccountID == 0) { MessageBox.Show("Döviz hesabınız bulunamadı."); return; }
+                if (doviz.Balance < (float)amount) { MessageBox.Show("Yetersiz döviz bakiyesi"); return; }
 
                 // Bakiye güncelle
-                dovizHesap.Balance -= (float)amount;
+                doviz.Balance -= (float)amount;
                 vadesiz.Balance += (float)(tlProceeds - fee);
 
-                // İşlemler
+                // İşlem kaydı
                 context.transactions.Add(new Models.Transactions
                 {
                     TransactionType = "FX-Sell",
-                    TransactionDate = System.DateTime.Now,
+                    TransactionDate = DateTime.Now,
                     Amount = (float)tlProceeds,
-                    FromAccountID = dovizHesap.AccountID,
+                    FromAccountID = doviz.AccountID,
                     ToAccountID = vadesiz.AccountID,
                     Fee = fee,
-                    Description = $"{amount:N4} {selectedCurrency} satış"
+                    Description = $"{amount.ToString("N4", CultureInfo.CurrentCulture)} {code} satış"
                 });
 
                 context.SaveChanges();
-                System.Windows.MessageBox.Show("Satış işlemi başarılı");
+                MessageBox.Show("Satış işlemi başarılı");
                 UpdateSelectedBalances();
             }
         }
@@ -278,16 +328,18 @@ namespace BankProject2
         {
             using (var context = new BankDbContext())
             {
-                // Buy sekmesinde: vadesiz TL bakiyesi
+                // Buy sekmesi: vadesiz TL bakiyesi
                 var vadesiz = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == "Vadesiz");
-                BuySelectedBalanceText.Text = vadesiz != null ? $"Vadesiz: {vadesiz.Balance.ToString("N2")} TL" : "Vadesiz: -";
+                var vadesizBal = vadesiz?.Balance ?? 0f;
+                BuySelectedBalanceText.Text = $"Vadesiz: {vadesizBal.ToString("N2", CultureInfo.CurrentCulture)} TL";
 
-                // Sell sekmesinde: seçilen döviz bakiyesi
+                // Sell sekmesi: seçilen döviz bakiyesi
                 if (SellCurrencyComboBox.SelectedItem is string sellCode)
                 {
                     var accountTypeCode = $"Döviz-{sellCode}";
                     var doviz = context.accounts.FirstOrDefault(a => a.CustomerID == _customerId && a.AccountType == accountTypeCode);
-                    SellSelectedBalanceText.Text = doviz != null ? $"Bakiye: {doviz.Balance.ToString("N4")} {sellCode}" : $"Bakiye: 0 {sellCode}";
+                    var dovizBal = doviz?.Balance ?? 0f;
+                    SellSelectedBalanceText.Text = $"Bakiye: {dovizBal.ToString("N4", CultureInfo.CurrentCulture)} {sellCode}";
                 }
                 else
                 {
@@ -298,7 +350,7 @@ namespace BankProject2
 
         private string GenerateSimpleIban()
         {
-            var rnd = new System.Random();
+            var rnd = new Random();
             return "TR" + rnd.Next(100000000, 999999999).ToString();
         }
     }
