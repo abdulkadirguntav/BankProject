@@ -1,262 +1,110 @@
 # VakıfBank Dijital Bankacılık Projesi
 
-Bu proje, WPF (Windows Presentation Foundation) kullanılarak geliştirilmiş bir dijital bankacılık uygulamasıdır. MySQL veritabanı kullanılarak müşteri hesapları, kredi kartları, döviz işlemleri ve daha fazlası yönetilmektedir.
+Bu proje, WPF (Windows Presentation Foundation) kullanılarak geliştirilmiş kapsamlı bir dijital bankacılık uygulamasıdır. MySQL veritabanı ile entegre çalışarak modern bankacılık işlemlerini simüle eder.
 
-## 🚀 Özellikler
+## 🚀 Ana Özellikler
 
-### Ana Özellikler
-- **Kullanıcı Girişi**: Telefon numarası ve şifre ile güvenli giriş
-- **Yeni Hesap Açma**: Kapsamlı kayıt formu ile yeni müşteri hesabı oluşturma
-- **Vadesiz Hesap**: Otomatik vadesiz hesap açılımı
-- **Kredi Kartı**: İsteğe bağlı kredi kartı başvurusu
+### Müşteri İşlemleri
+- **Güvenli Giriş**: Telefon numarası ve şifre ile kimlik doğrulama
+- **Yeni Hesap Açma**: Kapsamlı kayıt formu ile müşteri hesabı oluşturma
+- **Otomatik Vadesiz Hesap**: Kayıt sonrası otomatik hesap açılımı
+
+### Bankacılık Hizmetleri
+- **Kredi Kartı Yönetimi**: Limit ayarlama, borç takibi ve risk skorlama
 - **Döviz İşlemleri**: Güncel kurlar ve alım-satım işlemleri
-- **Havale/EFT**: Hesaplar arası para transferi
+- **Para Transferi**: Hesaplar arası havale/EFT işlemleri
 - **Vadeli Hesap**: Faizli vadeli hesap seçenekleri
+- **Kredi İşlemleri**: Kredi başvurusu ve ödeme takibi
 
-### Yeni Eklenen Özellikler
-- **📝 Kayıt Ol Sekmesi**: Ana menüye eklenen kayıt sekmesi
-- **Kapsamlı Kayıt Formu**: Ad, soyad, telefon, şifre, aylık gelir bilgileri
-- **Otomatik Hesap Açılımı**: Kayıt sonrası otomatik vadesiz hesap oluşturma
-- **Kredi Kartı Seçeneği**: Kayıt sırasında kredi kartı isteği
-- **Akıllı Risk Skorlama**: Aylık gelire göre otomatik risk skoru hesaplama
+### Akıllı Özellikler
+- **Risk Skorlama**: Aylık gelire göre otomatik risk değerlendirmesi
+- **IBAN Üretimi**: Türkiye standartlarında otomatik IBAN oluşturma
+- **Kart Numarası Üretimi**: Visa formatında güvenli kart numarası
+- **Otomatik Validasyon**: Telefon numarası ve şifre format kontrolü
 
 ## 🛠️ Teknolojiler
 
-- **Frontend**: WPF (Windows Presentation Foundation)
+- **Frontend**: WPF (Windows Presentation Foundation) - XAML
 - **Backend**: C# .NET 8.0
 - **Veritabanı**: MySQL
 - **ORM**: Entity Framework 6
 - **Test Framework**: MSTest
-- **UI Framework**: XAML
+- **Platform**: Windows 10/11
 
-## 📋 Gereksinimler
+## 📋 Sistem Gereksinimleri
 
-- Windows 10/11
+- Windows 10/11 işletim sistemi
 - .NET 8.0 SDK
 - MySQL Server 8.0+
 - Visual Studio 2022 veya Visual Studio Code
 
-## 🚀 Kurulum
+## 🎯 Kullanım Senaryoları
 
-### 1. Projeyi Klonlayın
-```bash
-git clone [repository-url]
-cd BankProject2
-```
+### Yeni Müşteri Kaydı
+1. Ana menüden "Kayıt Ol" sekmesine tıklayın
+2. Kişisel bilgilerinizi girin (ad, soyad, telefon, şifre)
+3. Aylık gelir bilginizi belirtin
+4. İsteğe bağlı kredi kartı başvurusu yapın
+5. Sistem otomatik olarak vadesiz hesap açacaktır
 
-### 2. Veritabanını Kurun
-MySQL'de aşağıdaki komutları çalıştırın:
+### Mevcut Müşteri Girişi
+1. Telefon numaranız ve şifrenizle giriş yapın
+2. Ana bankacılık menüsüne erişin
+3. İstediğiniz hizmeti seçin
 
-```sql
-CREATE DATABASE Bank;
-USE Bank;
-
--- Müşteri tablosu
-CREATE TABLE Customer (
-    CustomerID INT NOT NULL AUTO_INCREMENT,
-    FirstName VARCHAR(255) NOT NULL,
-    LastName VARCHAR(255) NOT NULL,
-    PhoneNumber VARCHAR(20) UNIQUE,
-    CustomerPassword VARCHAR(255) NOT NULL,
-    MonthlyIncome DOUBLE DEFAULT 0,
-    PRIMARY KEY (CustomerID)
-);
-
--- Döviz tablosu
-CREATE TABLE Currency (
-    CurrencyID INT NOT NULL AUTO_INCREMENT,
-    CurrencyCode VARCHAR(10) NOT NULL,
-    CurrencyDate DATE,
-    RateToTRY DOUBLE,
-    PRIMARY KEY (CurrencyID)
-);
-
--- Hesaplar tablosu
-CREATE TABLE Accounts (
-    AccountID INT NOT NULL AUTO_INCREMENT,
-    IBAN VARCHAR(34) UNIQUE,
-    AccountType VARCHAR(50) NOT NULL,
-    Balance DOUBLE DEFAULT 0,
-    StartDate DATE DEFAULT NULL,
-    MaturityDate DATE DEFAULT NULL,
-    InterestRate DOUBLE DEFAULT NULL,
-    IsBroken BOOLEAN DEFAULT FALSE,
-    PrincipalAmount DOUBLE DEFAULT NULL,
-    AccruedInterest DOUBLE DEFAULT NULL,
-    CurrencyID INT,
-    CustomerID INT,
-    PRIMARY KEY (AccountID),
-    FOREIGN KEY (CurrencyID) REFERENCES Currency(CurrencyID),
-    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
-);
-
--- Kredi kartı tablosu
-CREATE TABLE CreditCard (
-    CreditCardID INT NOT NULL AUTO_INCREMENT,
-    CustomerID INT,
-    CardNumber VARCHAR(20) UNIQUE,
-    CardExpiry DATE,
-    CardCVV VARCHAR(4),
-    `Limit` DOUBLE DEFAULT 0,
-    CurrentDebt DOUBLE DEFAULT 0,
-    RiskScore INT DEFAULT 0,
-    LatePaymentCount INT DEFAULT 0,
-    PRIMARY KEY (CreditCardID),
-    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
-);
-
--- İşlemler tablosu
-CREATE TABLE Transactions (
-    TransactionID INT NOT NULL AUTO_INCREMENT,
-    FromAccountID INT,
-    ToAccountID INT,
-    CreditCardID INT,
-    Amount DOUBLE,
-    TransactionType VARCHAR(50),
-    TransactionDate DATE,
-    Fee DOUBLE,
-    Description VARCHAR(255),
-    PRIMARY KEY (TransactionID),
-    FOREIGN KEY (FromAccountID) REFERENCES Accounts(AccountID),
-    FOREIGN KEY (ToAccountID) REFERENCES Accounts(AccountID),
-    FOREIGN KEY (CreditCardID) REFERENCES CreditCard(CreditCardID)
-);
-
--- Kredi tablosu
-CREATE TABLE Loan (
-    LoanID INT NOT NULL AUTO_INCREMENT,
-    LoanStatus VARCHAR(50) NOT NULL,
-    InterestRate DOUBLE,
-    Principal DOUBLE,
-    TermMonths INT,
-    CustomerID INT,
-    PRIMARY KEY (LoanID),
-    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
-);
-
--- Kredi ödemeleri tablosu
-CREATE TABLE LoanPayment (
-    LoanPaymentID INT NOT NULL AUTO_INCREMENT,
-    Amount DOUBLE,
-    PaidDate DATE,
-    LoanID INT,
-    PRIMARY KEY (LoanPaymentID),
-    FOREIGN KEY (LoanID) REFERENCES Loan(LoanID)
-);
-```
-
-### 3. Veritabanı Bağlantısını Yapılandırın
-`BankProject2/Data/BankDbContext.cs` dosyasında connection string'i güncelleyin:
-
-```csharp
-public class BankDbContext : DbContext
-{
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseMySQL("Server=localhost;Database=Bank;Uid=your_username;Pwd=your_password;");
-    }
-}
-```
-
-### 4. Projeyi Derleyin
-```bash
-dotnet build
-```
-
-## 🧪 Test'leri Çalıştırma
-
-### Test'leri Çalıştırın
-```bash
-cd BankProject2.Tests
-dotnet test
-```
-
-### Test Kapsamı
-Proje aşağıdaki alanları kapsayan kapsamlı test'lere sahiptir:
-
-#### Model Test'leri
-- **Customer**: Müşteri oluşturma ve özellik doğrulama
-- **Accounts**: Hesap türleri ve özellikler
-- **CreditCard**: Kredi kartı oluşturma ve risk skorlama
-- **Currency**: Döviz kurları ve validasyon
-- **Loan**: Kredi işlemleri
-- **Transactions**: Para transferi ve işlem geçmişi
-
-#### Business Logic Test'leri
-- **Risk Skorlama**: Aylık gelire göre otomatik risk hesaplama
-- **IBAN Üretimi**: Türkiye standartlarında IBAN oluşturma
-- **Kart Numarası Üretimi**: Visa formatında kart numarası
-- **CVV Üretimi**: Güvenli CVV kodu
-
-#### Validation Test'leri
-- **Telefon Numarası**: Format ve uzunluk kontrolü
-- **Şifre**: Minimum uzunluk ve karakter kontrolü
-- **Zorunlu Alanlar**: Boş değer kontrolü
-
-#### Integration Test'leri
-- **Kayıt İşlemi**: Müşteri ve hesap oluşturma
-- **Giriş İşlemi**: Kimlik doğrulama
-- **Kredi Kartı Başvurusu**: Otomatik kart oluşturma
-
-## 🎯 Kullanım
-
-### 1. Uygulamayı Başlatın
-```bash
-cd BankProject2
-dotnet run
-```
-
-### 2. Yeni Hesap Açın
-- Ana menüden "📝 Kayıt Ol" sekmesine tıklayın
-- Gerekli bilgileri doldurun:
-  - Ad ve Soyad
-  - Telefon numarası
-  - Şifre (en az 6 karakter)
-  - Aylık gelir
-  - Kredi kartı isteği (opsiyonel)
-- "Hesap Aç" butonuna tıklayın
-
-### 3. Giriş Yapın
-- Ana menüden telefon numaranız ve şifrenizi girin
-- "Giriş Yap" butonuna tıklayın
-
-### 4. Bankacılık İşlemlerini Kullanın
-- **🏦 Banka**: Hesap bilgileri ve işlemler
-- **💳 Kredi Kart**: Kart limiti ve borç durumu
-- **💱 Döviz**: Güncel kurlar
-- **📈 Güncel**: Piyasa bilgileri
-- **🔄 Al - Sat**: Döviz alım-satım
+### Bankacılık İşlemleri
+- **Hesap Bilgileri**: Bakiye sorgulama ve işlem geçmişi
+- **Kredi Kartı**: Limit değiştirme ve borç ödeme
+- **Döviz İşlemleri**: Güncel kurları görme ve alım-satım
+- **Para Transferi**: Hesaplar arası transfer işlemleri
 
 ## 🔒 Güvenlik Özellikleri
 
-- **Şifre Validasyonu**: Minimum 6 karakter zorunluluğu
-- **Telefon Numarası Kontrolü**: Benzersiz telefon numarası
-- **Risk Skorlama**: Gelir bazlı otomatik risk değerlendirmesi
-- **Güvenli Veri Saklama**: Entity Framework ile güvenli veri işleme
+- **Şifre Güvenliği**: Minimum 6 karakter zorunluluğu
+- **Benzersiz Kimlik**: Telefon numarası ile benzersiz müşteri tanımlama
+- **Risk Değerlendirmesi**: Gelir bazlı otomatik risk skorlama
+- **Güvenli Veri İşleme**: Entity Framework ile güvenli veritabanı işlemleri
 
-## 📊 Veritabanı Şeması
+## 📊 Veritabanı Yapısı
 
-Proje aşağıdaki ana tabloları içerir:
+Proje aşağıdaki ana veri tablolarını kullanır:
+- **Müşteri Bilgileri**: Kişisel ve finansal bilgiler
+- **Hesap Detayları**: Vadesiz, vadeli ve döviz hesapları
+- **Kredi Kartı Bilgileri**: Kart detayları ve borç durumu
+- **Döviz Kurları**: Güncel döviz bilgileri
+- **İşlem Geçmişi**: Tüm para transferleri ve işlemler
+- **Kredi Bilgileri**: Kredi başvuruları ve ödemeler
 
-- **Customer**: Müşteri bilgileri
-- **Accounts**: Hesap detayları (Vadesiz, Vadeli, Döviz)
-- **CreditCard**: Kredi kartı bilgileri
-- **Currency**: Döviz kurları
-- **Transactions**: İşlem geçmişi
-- **Loan**: Kredi bilgileri
-- **LoanPayment**: Kredi ödemeleri
+## 🧪 Test Kapsamı
 
-## 🐛 Bilinen Sorunlar
+Proje kapsamlı unit test'ler içerir:
+- **Model Test'leri**: Veri modellerinin doğruluğu
+- **İş Mantığı Test'leri**: Risk skorlama ve hesaplama algoritmaları
+- **Validasyon Test'leri**: Giriş verilerinin kontrolü
+- **Entegrasyon Test'leri**: Sistem bileşenlerinin birlikte çalışması
 
-- Test'ler çalıştırılırken veritabanı bağlantısı gerekli
-- MySQL servisinin çalışır durumda olması gerekiyor
+## 🔄 Güncelleme Geçmişi
+
+### v2.0.0 (Güncel)
+- Kayıt ol sekmesi eklendi
+- Otomatik hesap açılımı sistemi
+- Kredi kartı başvuru seçeneği
+- Kapsamlı unit test'ler
+- Risk skorlama sistemi
+- IBAN ve kart numarası üretimi
+
+### v1.0.0
+- Temel bankacılık işlemleri
+- Müşteri girişi
+- Hesap yönetimi
+- Döviz işlemleri
 
 ## 🤝 Katkıda Bulunma
 
 1. Projeyi fork edin
-2. Feature branch oluşturun (`git checkout -b feature/AmazingFeature`)
-3. Değişikliklerinizi commit edin (`git commit -m 'Add some AmazingFeature'`)
-4. Branch'inizi push edin (`git push origin feature/AmazingFeature`)
+2. Feature branch oluşturun
+3. Değişikliklerinizi commit edin
+4. Branch'inizi push edin
 5. Pull Request oluşturun
 
 ## 📝 Lisans
@@ -265,22 +113,4 @@ Bu proje MIT lisansı altında lisanslanmıştır.
 
 ## 📞 İletişim
 
-Proje hakkında sorularınız için:
-- GitHub Issues kullanın
-- Pull Request gönderin
-
-## 🔄 Güncelleme Geçmişi
-
-### v2.0.0 (Güncel)
-- ✅ Kayıt ol sekmesi eklendi
-- ✅ Otomatik hesap açılımı
-- ✅ Kredi kartı başvuru seçeneği
-- ✅ Kapsamlı Unit Test'ler
-- ✅ Risk skorlama sistemi
-- ✅ IBAN ve kart numarası üretimi
-
-### v1.0.0
-- ✅ Temel bankacılık işlemleri
-- ✅ Müşteri girişi
-- ✅ Hesap yönetimi
-- ✅ Döviz işlemleri
+Proje hakkında sorularınız için GitHub Issues kullanabilirsiniz.
