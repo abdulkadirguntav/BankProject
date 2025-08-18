@@ -5,10 +5,10 @@
              Height="240" Width="380">
     <Grid Background="#F4F6FB" Margin="20">
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
-            <TextBlock Text="Limit /Azalt" FontSize="22" FontWeight="Bold" Margin="0,0,0,18" HorizontalAlignment="Center"/>
-            <TextBlock Text="Miktar (TL):" FontSize="15" Margin="0,0,0,4"/>
+            <TextBlock Text="Limit Increase/Decrease" FontSize="22" FontWeight="Bold" Margin="0,0,0,18" HorizontalAlignment="Center"/>
+            <TextBlock Text="Amount (TL):" FontSize="15" Margin="0,0,0,4"/>
             <TextBox x:Name="AmountTextBox" Height="32" FontSize="15" Margin="0,0,0,18" Padding="8"/>
-            <Button Content="Onayla" Height="36" Background="#F7D90F" Foreground="Black" FontWeight="SemiBold" BorderThickness="0" Cursor="Hand" Click="ConfirmButton_Click"/>
+            <Button Content="Confirm" Height="36" Background="#F7D90F" Foreground="Black" FontWeight="SemiBold" BorderThickness="0" Cursor="Hand" Click="ConfirmButton_Click"/>
         </StackPanel>
     </Grid>
 </UserControl>

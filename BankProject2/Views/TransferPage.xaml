@@ -49,32 +49,32 @@
             <Border>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
                     <StackPanel Margin="0,0,24,0">
-                        <TextBlock Text="Vadesiz Bakiye" FontSize="14" Foreground="#888"/>
+                        <TextBlock Text="Current Balance" FontSize="14" Foreground="#888"/>
                         <TextBlock x:Name="VadesizBalanceText" Text="-" FontSize="22" FontWeight="Bold" Foreground="#27AE60"/>
                     </StackPanel>
                     <StackPanel>
-                        <TextBlock Text="Vadeli Bakiye" FontSize="14" Foreground="#888"/>
+                        <TextBlock Text="Time Deposit Balance" FontSize="14" Foreground="#888"/>
                         <TextBlock x:Name="VadeliBalanceText" Text="-" FontSize="22" FontWeight="Bold" Foreground="#27AE60"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
             <!-- Sekmeli yapı -->
             <TabControl x:Name="AccountTabControl" Margin="0,0,0,18">
-                <TabItem Header="Vadesiz Hesap" x:Name="TabVadesiz"/>
-                <TabItem Header="Vadeli Hesap" x:Name="TabVadeli"/>
+                <TabItem Header="Current Account" x:Name="TabVadesiz"/>
+                <TabItem Header="Time Deposit" x:Name="TabVadeli"/>
             </TabControl>
             <!-- Giriş alanları -->
             <Border>
                 <StackPanel>
-                    <TextBlock Text="Alıcı IBAN" FontSize="14" Foreground="#888" Margin="0,0,0,2"/>
+                    <TextBlock Text="Recipient IBAN" FontSize="14" Foreground="#888" Margin="0,0,0,2"/>
                     <TextBox x:Name="IbanTextBox" Height="30"/>
-                    <TextBlock Text="Tutar" FontSize="14" Foreground="#888" Margin="8,8,0,2"/>
+                    <TextBlock Text="Amount" FontSize="14" Foreground="#888" Margin="8,8,0,2"/>
                     <TextBox x:Name="AmountTextBox" Height="30"/>
-                    <TextBlock Text="Açıklama (opsiyonel)" FontSize="14" Foreground="#888" Margin="8,8,0,2"/>
+                    <TextBlock Text="Description (optional)" FontSize="14" Foreground="#888" Margin="8,8,0,2"/>
                     <TextBox x:Name="DescriptionTextBox" Height="30"/>
                 </StackPanel>
             </Border>
-            <Button x:Name="SendButton" Content="Gönder" Height="40" Margin="0,12,0,0" Background="#F7D90F" Foreground="#222" FontWeight="SemiBold" BorderThickness="0" Click="SendButton_Click"/>
+            <Button x:Name="SendButton" Content="Send" Height="40" Margin="0,12,0,0" Background="#F7D90F" Foreground="#222" FontWeight="SemiBold" BorderThickness="0" Click="SendButton_Click"/>
         </StackPanel>
     </Grid>
 </UserControl> 

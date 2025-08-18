@@ -35,13 +35,13 @@
                         <TextBlock Text="💰" FontSize="18" FontWeight="Bold" Foreground="#222" Canvas.Left="6" Canvas.Top="5"/>
                     </Canvas>
                 </Viewbox>
-                <TextBlock Text="Vadeli Hesap İşlemleri" FontSize="28" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
+                <TextBlock Text="Time Deposit Operations" FontSize="28" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
             </StackPanel>
 
             <!-- Vadesiz Hesap Bakiye -->
             <Border Background="#E8F5E8" Padding="20" Margin="0,0,0,20" CornerRadius="8">
                 <StackPanel>
-                    <TextBlock Text="Vadesiz Hesap Bakiye" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Current Account Balance" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
                     <TextBlock x:Name="VadesizBalanceText" Text="0,00 TL" FontSize="28" FontWeight="Bold" Foreground="#27AE60" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Border>
@@ -49,18 +49,18 @@
             <!-- Mevcut Vadeli Hesap Bilgileri -->
             <Border Background="#F8F9FA" Padding="20" Margin="0,0,0,20" CornerRadius="8">
                 <StackPanel>
-                    <TextBlock Text="Mevcut Vadeli Hesap" FontSize="18" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center" Foreground="#2C3E50"/>
+                    <TextBlock Text="Current Time Deposit" FontSize="18" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center" Foreground="#2C3E50"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                            <TextBlock Text="Ana Para" FontSize="14" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBlock Text="Principal Amount" FontSize="14" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
                             <TextBlock x:Name="PrincipalAmountText" Text="-" FontSize="22" FontWeight="Bold" Foreground="#27AE60" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1">
-                            <TextBlock Text="Biriken Faiz" FontSize="14" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBlock Text="Accrued Interest" FontSize="14" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
                             <TextBlock x:Name="AccruedInterestText" Text="-" FontSize="22" FontWeight="Bold" Foreground="#F39C12" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                         </StackPanel>
                     </Grid>
@@ -70,11 +70,11 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                            <TextBlock Text="Faiz Oranı" FontSize="14" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBlock Text="Interest Rate" FontSize="14" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
                             <TextBlock x:Name="InterestRateText" Text="-" FontSize="22" FontWeight="Bold" Foreground="#E74C3C" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1">
-                            <TextBlock Text="Vade Tarihi" FontSize="14" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBlock Text="Maturity Date" FontSize="14" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
                             <TextBlock x:Name="MaturityDateText" Text="-" FontSize="22" FontWeight="Bold" Foreground="#9B59B6" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                         </StackPanel>
                     </Grid>
@@ -84,11 +84,11 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                            <TextBlock Text="Toplam Tutar" FontSize="14" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBlock Text="Total Amount" FontSize="14" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
                             <TextBlock x:Name="TotalAmountText" Text="-" FontSize="22" FontWeight="Bold" Foreground="#2C3E50" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1">
-                            <TextBlock Text="Kalan Gün" FontSize="14" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBlock Text="Remaining Days" FontSize="14" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
                             <TextBlock x:Name="RemainingDaysText" Text="-" FontSize="22" FontWeight="Bold" Foreground="#E67E22" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                         </StackPanel>
                     </Grid>
@@ -98,34 +98,34 @@
             <!-- Yeni Vadeli Hesap Oluşturma -->
             <Border Background="#F8F9FA" Padding="20" CornerRadius="8">
                 <StackPanel>
-                    <TextBlock Text="Yeni Vadeli Hesap Oluştur" FontSize="18" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center" Foreground="#2C3E50"/>
+                    <TextBlock Text="Create New Time Deposit" FontSize="18" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center" Foreground="#2C3E50"/>
                     
-                    <TextBlock Text="Ana Para (TL)" FontSize="14" Foreground="#666" Margin="0,0,0,5" FontWeight="SemiBold"/>
+                    <TextBlock Text="Principal Amount (TL)" FontSize="14" Foreground="#666" Margin="0,0,0,5" FontWeight="SemiBold"/>
                     <TextBox x:Name="NewPrincipalTextBox" Margin="0,0,0,15" TextChanged="NewPrincipalTextBox_TextChanged"/>
                     
-                    <TextBlock Text="Vade Süresi" FontSize="14" Foreground="#666" Margin="0,0,0,5" FontWeight="SemiBold"/>
+                    <TextBlock Text="Maturity Period" FontSize="14" Foreground="#666" Margin="0,0,0,5" FontWeight="SemiBold"/>
                     <ComboBox x:Name="MaturityPeriodComboBox" Margin="0,0,0,15" SelectionChanged="MaturityPeriodComboBox_SelectionChanged">
-                        <ComboBoxItem Content="3 Ay"/>
-                        <ComboBoxItem Content="6 Ay"/>
-                        <ComboBoxItem Content="12 Ay"/>
-                        <ComboBoxItem Content="24 Ay"/>
+                        <ComboBoxItem Content="3 Months"/>
+                        <ComboBoxItem Content="6 Months"/>
+                        <ComboBoxItem Content="12 Months"/>
+                        <ComboBoxItem Content="24 Months"/>
                     </ComboBox>
                     
                     <!-- Hesaplama Sonuçları -->
                     <Border Background="#E8F5E8" Padding="15" Margin="0,0,0,20" CornerRadius="8">
                         <StackPanel>
-                            <TextBlock Text="Hesaplama Sonuçları" FontSize="16" FontWeight="Bold" Margin="0,0,0,15" HorizontalAlignment="Center" Foreground="#27AE60"/>
+                            <TextBlock Text="Calculation Results" FontSize="16" FontWeight="Bold" Margin="0,0,0,15" HorizontalAlignment="Center" Foreground="#27AE60"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                                    <TextBlock Text="Faiz Oranı" FontSize="12" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Interest Rate" FontSize="12" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
                                     <TextBlock x:Name="CalculatedInterestRateText" Text="-" FontSize="18" FontWeight="Bold" Foreground="#27AE60" HorizontalAlignment="Center"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1">
-                                    <TextBlock Text="Vade Tarihi" FontSize="12" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Maturity Date" FontSize="12" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
                                     <TextBlock x:Name="CalculatedMaturityDateText" Text="-" FontSize="18" FontWeight="Bold" Foreground="#9B59B6" HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Grid>
@@ -135,11 +135,11 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                                    <TextBlock Text="Toplam Faiz" FontSize="12" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Total Interest" FontSize="12" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
                                     <TextBlock x:Name="TotalInterestText" Text="-" FontSize="18" FontWeight="Bold" Foreground="#F39C12" HorizontalAlignment="Center"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1">
-                                    <TextBlock Text="Vade Sonu Tutar" FontSize="12" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Final Amount" FontSize="12" Foreground="#666" HorizontalAlignment="Center" FontWeight="SemiBold"/>
                                     <TextBlock x:Name="FinalAmountText" Text="-" FontSize="18" FontWeight="Bold" Foreground="#E74C3C" HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Grid>
@@ -147,8 +147,8 @@
                     </Border>
                     
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button x:Name="VadeliButton" Content="Vadeli Hesap İşlemi" Width="400" Margin="0,0,10,0" Click="VadeliButton_Click"/>
-                        <Button x:Name="RefreshButton" Content="Yenile" Width="100" Click="RefreshButton_Click"/>
+                        <Button x:Name="VadeliButton" Content="Time Deposit Operation" Width="400" Margin="0,0,10,0" Click="VadeliButton_Click"/>
+                        <Button x:Name="RefreshButton" Content="Refresh" Width="100" Click="RefreshButton_Click"/>
                     </StackPanel>
                 </StackPanel>
             </Border>

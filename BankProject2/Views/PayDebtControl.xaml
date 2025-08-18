@@ -5,12 +5,12 @@
              Height="260" Width="380">
     <Grid Background="#F4F6FB" Margin="20">
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="300">
-            <TextBlock Text="Kredi Kartı Borç Ödeme" FontSize="22" FontWeight="Bold" Margin="0,0,0,18" HorizontalAlignment="Center"/>
-            <TextBlock Text="Mevcut Borç:" FontSize="15"/>
+            <TextBlock Text="Credit Card Debt Payment" FontSize="22" FontWeight="Bold" Margin="0,0,0,18" HorizontalAlignment="Center"/>
+            <TextBlock Text="Current Debt:" FontSize="15"/>
             <TextBlock x:Name="DebtText" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,12"/>
-            <TextBlock Text="Ödeme Miktarı (TL):" FontSize="15" Margin="0,0,0,4"/>
+            <TextBlock Text="Payment Amount (TL):" FontSize="15" Margin="0,0,0,4"/>
             <TextBox x:Name="AmountTextBox" Height="32" FontSize="15" Margin="0,0,0,18" Padding="8"/>
-            <Button Content="Öde" Height="36" Background="#F7D90F" Foreground="Black" FontWeight="SemiBold" BorderThickness="0" Cursor="Hand" Click="ConfirmButton_Click"/>
+            <Button Content="Pay" Height="36" Background="#F7D90F" Foreground="Black" FontWeight="SemiBold" BorderThickness="0" Cursor="Hand" Click="ConfirmButton_Click"/>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -13,17 +13,17 @@
                             <TextBlock Text="💰" FontSize="18" FontWeight="Bold" Foreground="#222" Canvas.Left="6" Canvas.Top="5"/>
                         </Canvas>
                     </Viewbox>
-                    <TextBlock Text="Döviz Hesaplarım" FontSize="28" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
+                    <TextBlock Text="My Currency Accounts" FontSize="28" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
                 </StackPanel>
                 
                 <!-- Döviz Hesapları -->
-                <TextBlock Text="Döviz Hesaplarınız" FontSize="16" FontWeight="SemiBold" Foreground="#444" Margin="0,0,0,12" HorizontalAlignment="Center"/>
+                <TextBlock Text="Your Currency Accounts" FontSize="16" FontWeight="SemiBold" Foreground="#444" Margin="0,0,0,12" HorizontalAlignment="Center"/>
                 <ComboBox x:Name="CurrencyComboBox" Width="340" Height="36" FontSize="15" Margin="0,0,0,16"/>
                 
                 <!-- Seçili Döviz Bakiye -->
                 <Border Background="#F7D90F" Padding="16" Margin="0,0,0,16" CornerRadius="8">
                     <StackPanel>
-                        <TextBlock Text="Seçili Döviz Bakiye" FontSize="14" Foreground="#666" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Selected Currency Balance" FontSize="14" Foreground="#666" HorizontalAlignment="Center"/>
                         <TextBlock x:Name="SelectedCurrencyBalanceText" Text="0,00" FontSize="20" FontWeight="Bold" Foreground="#222" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Border>

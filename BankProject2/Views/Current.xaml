@@ -14,9 +14,9 @@
                             <TextBlock Text="$" FontSize="22" FontWeight="Bold" Foreground="#222" Canvas.Left="8" Canvas.Top="3"/>
                         </Canvas>
                     </Viewbox>
-                    <TextBlock Text="Güncel Kurlar" FontSize="30" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
+                    <TextBlock Text="Current Rates" FontSize="30" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
                 </StackPanel>
-                <TextBlock Text="Döviz kurlarını anlık olarak takip edebilirsiniz." FontSize="15" Foreground="#888" HorizontalAlignment="Center" Margin="0,0,0,18"/>
+                <TextBlock Text="Track currency rates in real-time." FontSize="15" Foreground="#888" HorizontalAlignment="Center" Margin="0,0,0,18"/>
                 <Border CornerRadius="10" Background="#fff" Padding="0" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="800" Height="420">
                     <DataGrid x:Name="dataGridRates"
                               AutoGenerateColumns="True"

@@ -27,7 +27,7 @@ namespace BankProject2
         {
             if (isLoggedIn)
             {
-                MessageBox.Show("Giriş yaptıktan sonra ana sayfaya tekrar erişemezsiniz.");
+                                 MessageBox.Show("You cannot access the home page again after logging in.");
                 return;
             }
             LoadHomePage();
@@ -37,31 +37,31 @@ namespace BankProject2
         {
             if (isLoggedIn)
             {
-                MessageBox.Show("Zaten giriş yapmış durumdasınız.");
+                                 MessageBox.Show("You are already logged in.");
                 return;
             }
             LoadRegisterPage();
         }
 
-        private void Banka_Click(object sender, RoutedEventArgs e)
-        {
-            if (!isLoggedIn)
-            {
-                MessageBox.Show("Lütfen önce giriş yapınız.");
-                return;
-            }
-            MainContent.Content = new BankPage(currentUser.CustomerID);
-        }
+                 private void Banka_Click(object sender, RoutedEventArgs e)
+         {
+             if (!isLoggedIn)
+             {
+                 MessageBox.Show("Please login first.");
+                 return;
+             }
+             MainContent.Content = new BankPage(currentUser.CustomerID);
+         }
 
-        private void CreditCard_Click(object sender, RoutedEventArgs e)
-        {
-            if (!isLoggedIn)
-            {
-                MessageBox.Show("Lütfen önce giriş yapınız.");
-                return;
-            }
-            MainContent.Content = new CreditCardPage(currentUser.CustomerID);
-        }
+                 private void CreditCard_Click(object sender, RoutedEventArgs e)
+         {
+             if (!isLoggedIn)
+             {
+                 MessageBox.Show("Please login first.");
+                 return;
+             }
+             MainContent.Content = new CreditCardPage(currentUser.CustomerID);
+         }
 
         private void LoadHomePage()
         {
@@ -79,23 +79,23 @@ namespace BankProject2
             // Başlık
             var titlePanel = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 0, 0, 18) };
             var icon = new TextBlock { Text = "📱", FontSize = 38, Margin = new Thickness(0, 0, 12, 0), VerticalAlignment = VerticalAlignment.Center };
-            var title = new TextBlock { Text = "Giriş Yap", FontSize = 30, FontWeight = FontWeights.Bold, Foreground = Brushes.Black, VerticalAlignment = VerticalAlignment.Center };
+                         var title = new TextBlock { Text = "Login", FontSize = 30, FontWeight = FontWeights.Bold, Foreground = Brushes.Black, VerticalAlignment = VerticalAlignment.Center };
             titlePanel.Children.Add(icon);
             titlePanel.Children.Add(title);
             panel.Children.Add(titlePanel);
 
             // Açıklama
-            panel.Children.Add(new TextBlock
-            {
-                Text = "Telefon numaranız ve şifreniz ile giriş yapın.",
-                FontSize = 15,
-                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#888")),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 0, 0, 18)
-            });
+                         panel.Children.Add(new TextBlock
+             {
+                 Text = "Login with your phone number and password.",
+                 FontSize = 15,
+                 Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#888")),
+                 HorizontalAlignment = HorizontalAlignment.Center,
+                 Margin = new Thickness(0, 0, 0, 18)
+             });
 
-            // Telefon alanı
-            panel.Children.Add(new TextBlock { Text = "Telefon Numarası", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
+                         // Phone field
+             panel.Children.Add(new TextBlock { Text = "Phone Number", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
 
             var phoneBox = new TextBox
             {
@@ -128,8 +128,8 @@ namespace BankProject2
 
             panel.Children.Add(phoneBox);
 
-            // Şifre alanı
-            panel.Children.Add(new TextBlock { Text = "Şifre", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
+                         // Password field
+             panel.Children.Add(new TextBlock { Text = "Password", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
 
             var passwordBox = new PasswordBox
             {
@@ -156,10 +156,10 @@ namespace BankProject2
                         currentUser = user;
                         MainContent.Content = new BankPage(user.CustomerID);
                     }
-                    else
-                    {
-                        MessageBox.Show("Telefon numarası veya şifre yanlış!");
-                    }
+                                         else
+                     {
+                         MessageBox.Show("Phone number or password is incorrect!");
+                     }
                 }
             };
 
@@ -180,10 +180,10 @@ namespace BankProject2
                 }
             };
 
-            // Giriş Butonu
-            var loginBtn = new Button
-            {
-                Content = "Giriş Yap",
+                         // Login Button
+             var loginBtn = new Button
+             {
+                 Content = "Login",
                 Width = 180,
                 Height = 38,
                 Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F7D90F")),
@@ -223,23 +223,23 @@ namespace BankProject2
             // Başlık
             var titlePanel = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 0, 0, 20) };
             var icon = new TextBlock { Text = "📝", FontSize = 38, Margin = new Thickness(0, 0, 12, 0), VerticalAlignment = VerticalAlignment.Center };
-            var title = new TextBlock { Text = "Yeni Hesap Aç", FontSize = 30, FontWeight = FontWeights.Bold, Foreground = Brushes.Black, VerticalAlignment = VerticalAlignment.Center };
+                         var title = new TextBlock { Text = "Create New Account", FontSize = 30, FontWeight = FontWeights.Bold, Foreground = Brushes.Black, VerticalAlignment = VerticalAlignment.Center };
             titlePanel.Children.Add(icon);
             titlePanel.Children.Add(title);
             panel.Children.Add(titlePanel);
 
             // Açıklama
-            panel.Children.Add(new TextBlock
-            {
-                Text = "Bilgilerinizi doldurun ve hesabınızı oluşturun.",
-                FontSize = 15,
-                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#888")),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 0, 0, 25)
-            });
+                         panel.Children.Add(new TextBlock
+             {
+                 Text = "Fill in your information and create your account.",
+                 FontSize = 15,
+                 Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#888")),
+                 HorizontalAlignment = HorizontalAlignment.Center,
+                 Margin = new Thickness(0, 0, 0, 25)
+             });
 
-            // Ad alanı
-            panel.Children.Add(new TextBlock { Text = "Ad *", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
+                         // First Name field
+             panel.Children.Add(new TextBlock { Text = "First Name *", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
             var firstNameBox = new TextBox
             {
                 Width = 420,
@@ -251,8 +251,8 @@ namespace BankProject2
             };
             panel.Children.Add(firstNameBox);
 
-            // Soyad alanı
-            panel.Children.Add(new TextBlock { Text = "Soyad *", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
+                         // Last Name field
+             panel.Children.Add(new TextBlock { Text = "Last Name *", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
             var lastNameBox = new TextBox
             {
                 Width = 420,
@@ -264,8 +264,8 @@ namespace BankProject2
             };
             panel.Children.Add(lastNameBox);
 
-            // Telefon alanı
-            panel.Children.Add(new TextBlock { Text = "Telefon Numarası *", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
+                         // Phone field
+             panel.Children.Add(new TextBlock { Text = "Phone Number *", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
             var phoneBox = new TextBox
             {
                 Width = 420,
@@ -295,8 +295,8 @@ namespace BankProject2
             });
             panel.Children.Add(phoneBox);
 
-            // Şifre alanı
-            panel.Children.Add(new TextBlock { Text = "Şifre *", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
+                         // Password field
+             panel.Children.Add(new TextBlock { Text = "Password *", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
             var passwordBox = new PasswordBox
             {
                 Width = 420,
@@ -308,8 +308,8 @@ namespace BankProject2
             };
             panel.Children.Add(passwordBox);
 
-            // Şifre tekrar alanı
-            panel.Children.Add(new TextBlock { Text = "Şifre Tekrar *", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
+                         // Password Confirm field
+             panel.Children.Add(new TextBlock { Text = "Confirm Password *", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
             var passwordConfirmBox = new PasswordBox
             {
                 Width = 420,
@@ -321,8 +321,8 @@ namespace BankProject2
             };
             panel.Children.Add(passwordConfirmBox);
 
-            // Aylık gelir alanı
-            panel.Children.Add(new TextBlock { Text = "Aylık Gelir (TL)", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
+                         // Monthly Income field
+             panel.Children.Add(new TextBlock { Text = "Monthly Income (TL)", FontSize = 15, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444")), Margin = new Thickness(0, 0, 0, 4) });
             var incomeBox = new TextBox
             {
                 Width = 420,
@@ -340,11 +340,11 @@ namespace BankProject2
             };
             panel.Children.Add(incomeBox);
 
-            // Kredi kartı isteği
-            var creditCardPanel = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0, 0, 0, 20) };
-            var creditCardCheckBox = new CheckBox
-            {
-                Content = "Kredi kartı istiyorum",
+                         // Credit Card Request
+             var creditCardPanel = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0, 0, 0, 20) };
+             var creditCardCheckBox = new CheckBox
+             {
+                 Content = "I want a credit card",
                 FontSize = 15,
                 FontWeight = FontWeights.SemiBold,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -356,10 +356,10 @@ namespace BankProject2
             // Butonlar
             var buttonPanel = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 20, 0, 0) };
 
-            // Geri dön butonu
-            var backBtn = new Button
-            {
-                Content = "Geri Dön",
+                         // Back button
+             var backBtn = new Button
+             {
+                 Content = "Back",
                 Width = 150,
                 Height = 40,
                 Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#888")),
@@ -372,10 +372,10 @@ namespace BankProject2
             backBtn.Click += (s, e) => LoadHomePage();
             buttonPanel.Children.Add(backBtn);
 
-            // Kayıt ol butonu
-            var registerBtn = new Button
-            {
-                Content = "Hesap Aç",
+                         // Register button
+             var registerBtn = new Button
+             {
+                 Content = "Create Account",
                 Width = 150,
                 Height = 40,
                 Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F7D90F")),
@@ -388,30 +388,30 @@ namespace BankProject2
             registerBtn.Click += (s, e) =>
             {
                 // Validasyon
-                if (string.IsNullOrWhiteSpace(firstNameBox.Text) || string.IsNullOrWhiteSpace(lastNameBox.Text) || 
-                    string.IsNullOrWhiteSpace(phoneBox.Text) || string.IsNullOrWhiteSpace(passwordBox.Password))
-                {
-                    MessageBox.Show("Lütfen tüm zorunlu alanları doldurun!");
-                    return;
-                }
+                                 if (string.IsNullOrWhiteSpace(firstNameBox.Text) || string.IsNullOrWhiteSpace(lastNameBox.Text) || 
+                     string.IsNullOrWhiteSpace(phoneBox.Text) || string.IsNullOrWhiteSpace(passwordBox.Password))
+                 {
+                     MessageBox.Show("Please fill in all required fields!");
+                     return;
+                 }
 
-                if (passwordBox.Password != passwordConfirmBox.Password)
-                {
-                    MessageBox.Show("Şifreler eşleşmiyor!");
-                    return;
-                }
+                                 if (passwordBox.Password != passwordConfirmBox.Password)
+                 {
+                     MessageBox.Show("Passwords do not match!");
+                     return;
+                 }
 
-                if (passwordBox.Password.Length < 6)
-                {
-                    MessageBox.Show("Şifre en az 6 karakter olmalıdır!");
-                    return;
-                }
+                                 if (passwordBox.Password.Length < 6)
+                 {
+                     MessageBox.Show("Password must be at least 6 characters!");
+                     return;
+                 }
 
-                if (phoneBox.Text.Length < 6)
-                {
-                    MessageBox.Show("Geçerli bir telefon numarası giriniz!");
-                    return;
-                }
+                                 if (phoneBox.Text.Length < 6)
+                 {
+                     MessageBox.Show("Please enter a valid phone number!");
+                     return;
+                 }
 
                 float monthlyIncome = 0;
                 if (!float.TryParse(incomeBox.Text, out monthlyIncome))
@@ -425,11 +425,11 @@ namespace BankProject2
                     {
                         // Telefon numarası kontrolü
                         var existingUser = context.customer.FirstOrDefault(c => c.PhoneNumber == phoneBox.Text);
-                        if (existingUser != null)
-                        {
-                            MessageBox.Show("Bu telefon numarası zaten kayıtlı!");
-                            return;
-                        }
+                                                 if (existingUser != null)
+                         {
+                             MessageBox.Show("This phone number is already registered!");
+                             return;
+                         }
 
                         // Yeni müşteri oluştur
                         var newCustomer = new Customer
@@ -475,13 +475,13 @@ namespace BankProject2
                             context.SaveChanges();
                         }
 
-                        MessageBox.Show("Hesabınız başarıyla oluşturuldu! Giriş yapabilirsiniz.");
+                                                 MessageBox.Show("Your account has been successfully created! You can now login.");
                         LoadHomePage();
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Hata oluştu: {ex.Message}");
+                                         MessageBox.Show($"An error occurred: {ex.Message}");
                 }
             };
             buttonPanel.Children.Add(registerBtn);
@@ -525,41 +525,41 @@ namespace BankProject2
             return 3; // Yüksek risk
         }
 
-        private void Currency_Click(object sender, RoutedEventArgs e)
-        {
-            if (!isLoggedIn)
-            {
-                MessageBox.Show("Lütfen önce giriş yapınız.");
-                return;
-            }
-            MainContent.Content = new CurrencyPage(currentUser.CustomerID);
-        }
+                 private void Currency_Click(object sender, RoutedEventArgs e)
+         {
+             if (!isLoggedIn)
+             {
+                 MessageBox.Show("Please login first.");
+                 return;
+             }
+             MainContent.Content = new CurrencyPage(currentUser.CustomerID);
+         }
 
         private void Current_Click(object sender, RoutedEventArgs e)
         {
             MainContent.Content = new CurrentPage();
         }
 
-        public void Sell_Buy_Click(object sender, RoutedEventArgs e)
+                 public void Sell_Buy_Click(object sender, RoutedEventArgs e)
+         {
+             if (!isLoggedIn)
+             {
+                 MessageBox.Show("Please login first.");
+                 return;
+             }
+             MainContent.Content = new Sell_BuyPage(currentUser.CustomerID);
+         }
+
+        private void Logout_Click(object sender, RoutedEventArgs e)
         {
-            if (!isLoggedIn)
-            {
-                MessageBox.Show("Lütfen önce giriş yapınız.");
-                return;
-            }
-            MainContent.Content = new Sell_BuyPage(currentUser.CustomerID);
+            PerformLogout();
         }
 
-        private void log_out_btnClick(object sender, RoutedEventArgs e)
-        {
-            Logout();
-        }
-
-        public void Logout()
+        public void PerformLogout()
         {
             isLoggedIn = false;
             currentUser = null;
-            MessageBox.Show("Başarıyla çıkış yaptınız.");
+                         MessageBox.Show("You have successfully logged out.");
             LoadHomePage();
         }
     }

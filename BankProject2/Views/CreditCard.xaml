@@ -22,25 +22,25 @@
                             <TextBlock Text="💳" FontSize="18" FontWeight="Bold" Foreground="#222" Canvas.Left="6" Canvas.Top="5"/>
                         </Canvas>
                     </Viewbox>
-                    <TextBlock Text="Kredi Kartı" FontSize="28" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
+                    <TextBlock Text="Credit Card" FontSize="28" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
                 </StackPanel>
-                <TextBlock Text="Kart limitinizi ve borcunuzu görüntüleyin, işlemlerinizi kolayca yönetin." FontSize="15" Foreground="#888" HorizontalAlignment="Center" Margin="0,0,0,18"/>
+                <TextBlock Text="View your card limit and debt, manage your transactions easily." FontSize="15" Foreground="#888" HorizontalAlignment="Center" Margin="0,0,0,18"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,18" >
                     <Border>
                         <StackPanel>
-                            <TextBlock Text="Kullanılabilir Limit" FontSize="14" Foreground="#888"/>
+                            <TextBlock Text="Available Limit" FontSize="14" Foreground="#888"/>
                             <TextBlock x:Name="LimitText" Text="-" FontSize="22" FontWeight="Bold" Foreground="#222"/>
                         </StackPanel>
                     </Border>
                     <Border>
                         <StackPanel>
-                            <TextBlock Text="Güncel Borç" FontSize="14" Foreground="#888"/>
+                            <TextBlock Text="Current Debt" FontSize="14" Foreground="#888"/>
                             <TextBlock x:Name="DebtText" Text="-" FontSize="22" FontWeight="Bold" Foreground="#C0392B"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
-                    <Button Content="Borç Öde"
+                    <Button Content="Pay Debt"
                             Width="120"
                             Height="36"
                             Click="PayDebt_Click"
@@ -50,7 +50,7 @@
                             BorderThickness="0"
                             Cursor="Hand"
                             Margin="0,0,16,0"/>
-                    <Button Content="Limit Arttır/Azalt"
+                    <Button Content="Increase/Decrease Limit"
                             Width="160"
                             Height="36"
                             Click="ChangeLimit_Click"
@@ -60,7 +60,7 @@
                             BorderThickness="0"
                             Cursor="Hand"/>
                 </StackPanel>
-                <TextBlock Text="Kart İşlem Geçmişi" FontSize="20" FontWeight="Bold" Margin="0,10" HorizontalAlignment="Center"/>
+                <TextBlock Text="Card Transaction History" FontSize="20" FontWeight="Bold" Margin="0,10" HorizontalAlignment="Center"/>
                 <Border CornerRadius="10" Background="#fff" Padding="0" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="440" Height="220">
                     <DataGrid x:Name="CreditCardDataGrid" Height="200" Width="420" Margin="0" Background="#fff" BorderThickness="0" RowBackground="#F9F9F9" AlternatingRowBackground="#F4F6FB" GridLinesVisibility="None" HeadersVisibility="Column" ColumnHeaderHeight="32" RowHeaderWidth="0" FontSize="15" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"/>
                 </Border>

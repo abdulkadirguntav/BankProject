@@ -1,84 +1,56 @@
-# VakıfBank Dijital Bankacılık Projesi
+# VakifBank - Digital Banking Application
 
-Bu proje, WPF (Windows Presentation Foundation) kullanılarak geliştirilmiş kapsamlı bir dijital bankacılık uygulamasıdır. MySQL veritabanı ile entegre çalışarak modern bankacılık işlemlerini simüle eder.
+A comprehensive digital banking application built with WPF and C# .NET 8.0, featuring modern banking services and real-time currency operations.
 
-## 🚀 Ana Özellikler
+## Features
 
-### Müşteri İşlemleri
-- **Güvenli Giriş**: Telefon numarası ve şifre ile kimlik doğrulama
-- **Yeni Hesap Açma**: Kapsamlı kayıt formu ile müşteri hesabı oluşturma
-- **Otomatik Vadesiz Hesap**: Kayıt sonrası otomatik hesap açılımı
+### Customer Operations
+- User registration and authentication
+- Account management (current and time deposit accounts)
+- Money transfer between accounts
+- Transaction history tracking
 
-### Bankacılık Hizmetleri
-- **Kredi Kartı Yönetimi**: Limit ayarlama, borç takibi ve risk skorlama
-- **Döviz İşlemleri**: Güncel kurlar ve alım-satım işlemleri
-- **Para Transferi**: Hesaplar arası havale/EFT işlemleri
-- **Vadeli Hesap**: Faizli vadeli hesap seçenekleri
-- **Kredi İşlemleri**: Kredi başvurusu ve ödeme takibi
+### Banking Services
+- Credit card management with limit controls
+- Debt payment functionality
+- Risk scoring based on monthly income
+- IBAN generation for accounts
 
-### Akıllı Özellikler
-- **Risk Skorlama**: Aylık gelire göre otomatik risk değerlendirmesi
-- **IBAN Üretimi**: Türkiye standartlarında otomatik IBAN oluşturma
-- **Kart Numarası Üretimi**: Visa formatında güvenli kart numarası
-- **Otomatik Validasyon**: Telefon numarası ve şifre format kontrolü
+### Smart Features
+- Real-time currency exchange rates via TCMB API
+- Currency buy/sell operations
+- Time deposit account creation and management
+- Automatic interest calculations
 
-## 🛠️ Teknolojiler
+## Technologies Used
 
-- **Frontend**: WPF (Windows Presentation Foundation) - XAML
+- **Frontend**: WPF (Windows Presentation Foundation)
 - **Backend**: C# .NET 8.0
-- **Veritabanı**: MySQL
-- **ORM**: Entity Framework 6
-- **Test Framework**: MSTest
-- **Platform**: Windows 10/11
+- **Database**: MySQL with Entity Framework 6
+- **Testing**: MSTest for unit testing
+- **Architecture**: MVVM pattern
+- **API Integration**: TCMB (Turkish Central Bank) for exchange rates
 
-## 📋 Sistem Gereksinimleri
+## Project Structure
 
-- Windows 10/11 işletim sistemi
-- .NET 8.0 SDK
-- MySQL Server 8.0+
-- Visual Studio 2022 veya Visual Studio Code
+The application follows a modular architecture with separate components for:
+- Customer management
+- Account operations
+- Credit card services
+- Currency trading
+- Transaction processing
 
-## 🎯 Kullanım Senaryoları
+## Getting Started
 
-### Yeni Müşteri Kaydı
-1. Ana menüden "Kayıt Ol" sekmesine tıklayın
-2. Kişisel bilgilerinizi girin (ad, soyad, telefon, şifre)
-3. Aylık gelir bilginizi belirtin
-4. İsteğe bağlı kredi kartı başvurusu yapın
-5. Sistem otomatik olarak vadesiz hesap açacaktır
+1. Clone the repository
+2. Set up MySQL database
+3. Configure connection strings
+4. Build and run the application
 
-### Mevcut Müşteri Girişi
-1. Telefon numaranız ve şifrenizle giriş yapın
-2. Ana bankacılık menüsüne erişin
-3. İstediğiniz hizmeti seçin
+## Testing
 
-### Bankacılık İşlemleri
-- **Hesap Bilgileri**: Bakiye sorgulama ve işlem geçmişi
-- **Kredi Kartı**: Limit değiştirme ve borç ödeme
-- **Döviz İşlemleri**: Güncel kurları görme ve alım-satım
-- **Para Transferi**: Hesaplar arası transfer işlemleri
-
-## 🔒 Güvenlik Özellikleri
-
-- **Şifre Güvenliği**: Minimum 6 karakter zorunluluğu
-- **Benzersiz Kimlik**: Telefon numarası ile benzersiz müşteri tanımlama
-- **Risk Değerlendirmesi**: Gelir bazlı otomatik risk skorlama
-- **Güvenli Veri İşleme**: Entity Framework ile güvenli veritabanı işlemleri
-
-## 📊 Veritabanı Yapısı
-
-Proje aşağıdaki ana veri tablolarını kullanır:
-- **Müşteri Bilgileri**: Kişisel ve finansal bilgiler
-- **Hesap Detayları**: Vadesiz, vadeli ve döviz hesapları
-- **Kredi Kartı Bilgileri**: Kart detayları ve borç durumu
-- **Döviz Kurları**: Güncel döviz bilgileri
-- **İşlem Geçmişi**: Tüm para transferleri ve işlemler
-- **Kredi Bilgileri**: Kredi başvuruları ve ödemeler
-
-## 🧪 Test Kapsamı
-
-Proje kapsamlı unit test'ler içerir:
-- **Model Test'leri**: Veri modellerinin doğruluğu
-- **İş Mantığı Test'leri**: Risk skorlama ve hesaplama algoritmaları
-- **Validasyon Test'leri**: Giriş verilerinin kontrolü
-- **Entegrasyon Test'leri**: Sistem bileşenlerinin birlikte çalışması
+The project includes comprehensive unit tests covering:
+- Model validations
+- Business logic
+- Database operations
+- API integrations

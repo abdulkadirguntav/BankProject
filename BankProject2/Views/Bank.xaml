@@ -48,7 +48,7 @@
     <Grid>
         <Border Background="#fff" CornerRadius="18" Padding="36" Margin="40" Effect="{DynamicResource DropShadowEffect}" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TabControl x:Name="BankTabControl" SelectedIndex="0">
-                <TabItem Header="Vadesiz Hesap">
+                <TabItem Header="Current Account">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="520">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,18" VerticalAlignment="Center">
                             <Viewbox Width="38" Height="38" Margin="0,0,12,0" VerticalAlignment="Center">
@@ -57,24 +57,24 @@
                                     <TextBlock Text="💰" FontSize="18" FontWeight="Bold" Foreground="#222" Canvas.Left="6" Canvas.Top="5"/>
                                 </Canvas>
                             </Viewbox>
-                            <TextBlock Text="Vadesiz Hesap" FontSize="28" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
+                            <TextBlock Text="Current Account" FontSize="28" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
                         </StackPanel>
                         <Border>
                             <StackPanel>
-                                <TextBlock Text="Bakiye" FontSize="14" Foreground="#888"/>
+                                <TextBlock Text="Balance" FontSize="14" Foreground="#888"/>
                                 <TextBlock x:Name="VadesizBalanceText" Text="-" FontSize="22" FontWeight="Bold" Foreground="#27AE60"/>
                             </StackPanel>
                         </Border>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,18" Width="150" >
-                            <Button Content="Para Gönder" Width="150" Height="40" Background="#F7D90F" Foreground="#222" FontWeight="SemiBold" BorderThickness="0" Margin="0,0,16,0" Cursor="Hand" Click="ParaGonderButton_Click"/>
+                            <Button Content="Send Money" Width="150" Height="40" Background="#F7D90F" Foreground="#222" FontWeight="SemiBold" BorderThickness="0" Margin="0,0,16,0" Cursor="Hand" Click="ParaGonderButton_Click"/>
                         </StackPanel>
-                        <TextBlock Text="İşlem Geçmişi" FontSize="16" FontWeight="SemiBold" Margin="16,16,0,8" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Transaction History" FontSize="16" FontWeight="SemiBold" Margin="16,16,0,8" HorizontalAlignment="Center"/>
                         <Border CornerRadius="10" Background="#fff" Padding="0" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="440" Height="220">
                             <DataGrid x:Name="VadesizTransactionDataGrid" Height="200" Width="420" Margin="0" Background="#fff" BorderThickness="0" RowBackground="#F9F9F9" AlternatingRowBackground="#F4F6FB" GridLinesVisibility="None" HeadersVisibility="Column" ColumnHeaderHeight="32" RowHeaderWidth="0" FontSize="15" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"/>
                         </Border>
                     </StackPanel>
                 </TabItem>
-                <TabItem Header="Vadeli Hesap">
+                <TabItem Header="Time Deposit">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="520">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,18" VerticalAlignment="Center">
                             <Viewbox Width="38" Height="38" Margin="0,0,12,0" VerticalAlignment="Center">
@@ -83,18 +83,18 @@
                                     <TextBlock Text="🏦" FontSize="18" FontWeight="Bold" Foreground="#222" Canvas.Left="6" Canvas.Top="5"/>
                                 </Canvas>
                             </Viewbox>
-                            <TextBlock Text="Vadeli Hesap" FontSize="28" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
+                            <TextBlock Text="Time Deposit" FontSize="28" FontWeight="Bold" Foreground="#222" VerticalAlignment="Center"/>
                         </StackPanel>
                         <Border>
                             <StackPanel>
-                                <TextBlock Text="Bakiye" FontSize="14" Foreground="#888"/>
+                                <TextBlock Text="Balance" FontSize="14" Foreground="#888"/>
                                 <TextBlock x:Name="VadeliBalanceText" Text="-" FontSize="22" FontWeight="Bold" Foreground="#27AE60"/>
                             </StackPanel>
                         </Border>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,18" >
-                            <Button Content="Vadeli Hesap" Width="150" Height="40" Background="#222" Foreground="#fff" FontWeight="SemiBold" BorderThickness="0" Cursor="Hand" Click="VadeliHesapButton_Click"/>
+                            <Button Content="Time Deposit" Width="150" Height="40" Background="#222" Foreground="#fff" FontWeight="SemiBold" BorderThickness="0" Cursor="Hand" Click="VadeliHesapButton_Click"/>
                         </StackPanel>
-                        <TextBlock Text="İşlem Geçmişi" FontSize="16" FontWeight="SemiBold" Margin="16,16,0,8" HorizontalAlignment="Center"/>
+                                                  <TextBlock Text="Transaction History" FontSize="16" FontWeight="SemiBold" Margin="16,16,0,8" HorizontalAlignment="Center"/>
                         <Border CornerRadius="10" Background="#fff" Padding="0" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="440" Height="220">
                             <DataGrid x:Name="VadeliTransactionDataGrid" Height="200" Width="420" Margin="0" Background="#fff" BorderThickness="0" RowBackground="#F9F9F9" AlternatingRowBackground="#F4F6FB" GridLinesVisibility="None" HeadersVisibility="Column" ColumnHeaderHeight="32" RowHeaderWidth="0" FontSize="15" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"/>
                         </Border>
