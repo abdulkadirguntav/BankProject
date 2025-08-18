@@ -1,56 +1,90 @@
-# VakifBank - Digital Banking Application
+# Bank Project 2
 
-A comprehensive digital banking application built with WPF and C# .NET 8.0, featuring modern banking services and real-time currency operations.
+Bu proje, WPF teknolojisi kullanılarak geliştirilmiş bir bankacılık uygulamasıdır. SQLite veritabanı kullanarak dosya tabanlı veri saklama yapar.
 
-## Features
+## Özellikler
 
-### Customer Operations
-- User registration and authentication
-- Account management (current and time deposit accounts)
-- Money transfer between accounts
-- Transaction history tracking
+- Müşteri girişi ve kimlik doğrulama
+- Vadesiz hesap yönetimi
+- Vadeli hesap oluşturma ve yönetimi
+- Döviz alım-satım işlemleri
+- Kredi kartı yönetimi
+- Para transferi işlemleri
+- Güncel döviz kurları takibi
 
-### Banking Services
-- Credit card management with limit controls
-- Debt payment functionality
-- Risk scoring based on monthly income
-- IBAN generation for accounts
+## Gereksinimler
 
-### Smart Features
-- Real-time currency exchange rates via TCMB API
-- Currency buy/sell operations
-- Time deposit account creation and management
-- Automatic interest calculations
+- .NET 8.0 SDK
+- Visual Studio 2022 veya Visual Studio Code
+- Windows 10/11
 
-## Technologies Used
+## Kurulum ve Çalıştırma
 
-- **Frontend**: WPF (Windows Presentation Foundation)
-- **Backend**: C# .NET 8.0
-- **Database**: MySQL with Entity Framework 6
-- **Testing**: MSTest for unit testing
-- **Architecture**: MVVM pattern
-- **API Integration**: TCMB (Turkish Central Bank) for exchange rates
+### 1. Projeyi İndirin
+```bash
+git clone https://github.com/kullaniciadi/BankProject2.git
+cd BankProject2
+```
 
-## Project Structure
+### 2. Projeyi Açın
+- Visual Studio 2022 ile `BankProject2.sln` dosyasını açın
+- Veya Visual Studio Code ile proje klasörünü açın
 
-The application follows a modular architecture with separate components for:
-- Customer management
-- Account operations
-- Credit card services
-- Currency trading
-- Transaction processing
+### 3. Bağımlılıkları Yükleyin
+```bash
+dotnet restore
+```
 
-## Getting Started
+### 4. Projeyi Çalıştırın
+```bash
+dotnet run --project BankProject2
+```
 
-1. Clone the repository
-2. Set up MySQL database
-3. Configure connection strings
-4. Build and run the application
+## Demo Hesap Bilgileri
 
-## Testing
+Uygulama ilk çalıştırıldığında otomatik olarak bir demo hesap oluşturulur:
 
-The project includes comprehensive unit tests covering:
-- Model validations
-- Business logic
-- Database operations
-- API integrations
+- **Telefon Numarası:** 5551234567
+- **Şifre:** 123456
+
+## Veritabanı
+
+- Proje SQLite veritabanı kullanır
+- Veritabanı dosyası (`BankDatabase.db`) uygulama klasöründe otomatik oluşturulur
+- İlk çalıştırmada örnek veriler otomatik olarak eklenir
+
+## Proje Yapısı
+
+```
+BankProject2/
+├── BankProject2/           # Ana uygulama
+│   ├── Data/              # Veritabanı bağlantısı
+│   ├── Models/            # Veri modelleri
+│   ├── Views/             # WPF sayfaları
+│   └── MainWindow.xaml    # Ana pencere
+├── BankProject2.Tests2/   # Test projesi
+└── README.md
+```
+
+## Test Etme
+
+Testleri çalıştırmak için:
+```bash
+dotnet test
+```
+
+## Katkıda Bulunma
+
+1. Bu repository'yi fork edin
+2. Yeni bir branch oluşturun (`git checkout -b feature/yeni-ozellik`)
+3. Değişikliklerinizi commit edin (`git commit -am 'Yeni özellik eklendi'`)
+4. Branch'inizi push edin (`git push origin feature/yeni-ozellik`)
+5. Pull Request oluşturun
+
+## Lisans
+
+Bu proje MIT lisansı altında lisanslanmıştır.
+
+## İletişim
+
+Sorularınız için issue açabilir veya pull request gönderebilirsiniz.

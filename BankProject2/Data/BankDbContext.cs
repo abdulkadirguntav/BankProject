@@ -1,5 +1,6 @@
 ﻿using BankProject2.Models;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace BankProject2.Data
 {
@@ -23,8 +24,10 @@ namespace BankProject2.Data
         {
             if (!optionsBuilder.IsConfigured) // Testte override edilirse burası çalışmaz
             {
-                string connectionString = "Server=localhost;Database=bank;Uid=root;Pwd=Retro1320;";
-                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                // SQLite veritabanı dosyası - uygulama klasöründe oluşturulacak
+                string dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BankDatabase.db");
+                string connectionString = $"Data Source={dbPath}";
+                optionsBuilder.UseSqlite(connectionString);
             }
         }
 
