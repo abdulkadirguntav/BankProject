@@ -37,15 +37,51 @@ dotnet restore
 
 ### 4. Projeyi Çalıştırın
 ```bash
-dotnet run --project BankProject2
+dotnet run --project ./BankProject2
 ```
 
 ## Demo Hesap Bilgileri
 
-Uygulama ilk çalıştırıldığında otomatik olarak bir demo hesap oluşturulur:
+Uygulama ilk çalıştırıldığında otomatik olarak iki demo hesap oluşturulur:
 
+### Müşteri 1 - Ahmet Yılmaz
 - **Telefon Numarası:** 5551234567
 - **Şifre:** 123456
+- **Vadesiz Hesap:** 5.000 TL
+- **Vadeli Hesap:** 10.000 TL (60 gün vadeli)
+- **Kredi Kartı:** 15.000 TL limit, 2.500 TL borç
+
+### Müşteri 2 - Ayşe Demir
+- **Telefon Numarası:** 5559876543
+- **Şifre:** 123456
+- **Vadesiz Hesap:** 3.000 TL
+- **Vadeli Hesap:** 8.000 TL (45 gün vadeli)
+- **Kredi Kartı:** 12.000 TL limit, 1.800 TL borç
+
+## Test Senaryoları
+
+### Para Transferi Testi
+1. Ahmet hesabına giriş yapın
+2. Transfer sayfasına gidin
+3. Ayşe'nin IBAN'ını kullanarak transfer yapın
+4. Ayşe hesabına giriş yaparak transferi kontrol edin
+
+### Kredi Kartı Borç Ödeme
+1. Ahmet hesabına giriş yapın
+2. Kredi kartı sayfasına gidin
+3. Borç ödeme işlemi yapın
+4. Kalan borç miktarını kontrol edin
+
+### Döviz Alım-Satım
+1. Herhangi bir hesaba giriş yapın
+2. Döviz sayfasına gidin
+3. USD, EUR, GBP alım-satım işlemleri yapın
+4. Hesap bakiyesindeki değişimi kontrol edin
+
+### Vadeli Hesap İşlemleri
+1. Vadeli hesap sayfasına gidin
+2. Yeni vadeli hesap oluşturun
+3. Faiz hesaplamalarını kontrol edin
 
 ## Veritabanı
 

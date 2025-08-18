@@ -30,18 +30,167 @@ namespace BankProject2
                     // Veritabanını oluştur
                     context.Database.EnsureCreated();
                     
-                    // Örnek müşteri ekle (eğer yoksa)
+                    // Örnek müşteriler ekle (eğer yoksa)
                     if (!context.customer.Any())
                     {
-                        var sampleCustomer = new Customer
+                        // Demo Müşteri 1
+                        var customer1 = new Customer
                         {
-                            FirstName = "Demo",
-                            LastName = "User",
+                            FirstName = "Ahmet",
+                            LastName = "Yılmaz",
                             PhoneNumber = "5551234567",
                             CustomerPassword = "123456",
-                            MonthlyIncome = 10000f
+                            MonthlyIncome = 15000f
                         };
-                        context.customer.Add(sampleCustomer);
+                        context.customer.Add(customer1);
+
+                        // Demo Müşteri 2
+                        var customer2 = new Customer
+                        {
+                            FirstName = "Ayşe",
+                            LastName = "Demir",
+                            PhoneNumber = "5559876543",
+                            CustomerPassword = "123456",
+                            MonthlyIncome = 12000f
+                        };
+                        context.customer.Add(customer2);
+                        
+                        context.SaveChanges();
+
+                        // Müşteri ID'lerini al
+                        var ahmet = context.customer.First(c => c.PhoneNumber == "5551234567");
+                        var ayse = context.customer.First(c => c.PhoneNumber == "5559876543");
+
+                        // Ahmet'in hesapları
+                        var ahmetVadesiz = new Accounts
+                        {
+                            CustomerID = ahmet.CustomerID,
+                            AccountType = "Vadesiz",
+                            Balance = 5000f,
+                            IBAN = "TR123456789012345678901234"
+                        };
+                        context.accounts.Add(ahmetVadesiz);
+
+                        var ahmetVadeli = new Accounts
+                        {
+                            CustomerID = ahmet.CustomerID,
+                            AccountType = "Vadeli",
+                            Balance = 10000f,
+                            StartDate = DateTime.Now.AddDays(-30),
+                            MaturityDate = DateTime.Now.AddDays(60),
+                            InterestRate = 0.15f,
+                            PrincipalAmount = 10000f,
+                            AccruedInterest = 125f,
+                            IBAN = "TR123456789012345678901235"
+                        };
+                        context.accounts.Add(ahmetVadeli);
+
+                        // Ayşe'nin hesapları
+                        var ayseVadesiz = new Accounts
+                        {
+                            CustomerID = ayse.CustomerID,
+                            AccountType = "Vadesiz",
+                            Balance = 3000f,
+                            IBAN = "TR987654321098765432109876"
+                        };
+                        context.accounts.Add(ayseVadesiz);
+
+                        var ayseVadeli = new Accounts
+                        {
+                            CustomerID = ayse.CustomerID,
+                            AccountType = "Vadeli",
+                            Balance = 8000f,
+                            StartDate = DateTime.Now.AddDays(-15),
+                            MaturityDate = DateTime.Now.AddDays(45),
+                            InterestRate = 0.12f,
+                            PrincipalAmount = 8000f,
+                            AccruedInterest = 40f,
+                            IBAN = "TR987654321098765432109877"
+                        };
+                        context.accounts.Add(ayseVadeli);
+
+                        context.SaveChanges();
+
+                        // Kredi kartları
+                        var ahmetKart = new CreditCard
+                        {
+                            CustomerID = ahmet.CustomerID,
+                            CardNumber = "4532123456789012",
+                            CardExpiry = DateTime.Now.AddYears(3),
+                            CardCVV = "123",
+                            Limit = 15000f,
+                            CurrentDebt = 2500f,
+                            RiskScore = 750,
+                            LatePaymentCount = 0
+                        };
+                        context.creditCard.Add(ahmetKart);
+
+                        var ayseKart = new CreditCard
+                        {
+                            CustomerID = ayse.CustomerID,
+                            CardNumber = "4532987654321098",
+                            CardExpiry = DateTime.Now.AddYears(2),
+                            CardCVV = "456",
+                            Limit = 12000f,
+                            CurrentDebt = 1800f,
+                            RiskScore = 800,
+                            LatePaymentCount = 0
+                        };
+                        context.creditCard.Add(ayseKart);
+
+                        context.SaveChanges();
+
+                        // Örnek işlemler
+                        var ahmetVadesizAccount = context.accounts.First(a => a.CustomerID == ahmet.CustomerID && a.AccountType == "Vadesiz");
+                        var ayseVadesizAccount = context.accounts.First(a => a.CustomerID == ayse.CustomerID && a.AccountType == "Vadesiz");
+
+                        // Ahmet'ten Ayşe'ye transfer
+                        var transfer1 = new Transactions
+                        {
+                            FromAccountID = ahmetVadesizAccount.AccountID,
+                            ToAccountID = ayseVadesizAccount.AccountID,
+                            Amount = 500f,
+                            TransactionType = "Transfer",
+                            TransactionDate = DateTime.Now.AddDays(-2),
+                            Description = "Ahmet'ten Ayşe'ye transfer"
+                        };
+                        context.transactions.Add(transfer1);
+
+                        // Ayşe'den Ahmet'e transfer
+                        var transfer2 = new Transactions
+                        {
+                            FromAccountID = ayseVadesizAccount.AccountID,
+                            ToAccountID = ahmetVadesizAccount.AccountID,
+                            Amount = 200f,
+                            TransactionType = "Transfer",
+                            TransactionDate = DateTime.Now.AddDays(-1),
+                            Description = "Ayşe'den Ahmet'e transfer"
+                        };
+                        context.transactions.Add(transfer2);
+
+                        // Para yatırma işlemleri
+                        var deposit1 = new Transactions
+                        {
+                            FromAccountID = null,
+                            ToAccountID = ahmetVadesizAccount.AccountID,
+                            Amount = 1000f,
+                            TransactionType = "Deposit",
+                            TransactionDate = DateTime.Now.AddDays(-5),
+                            Description = "ATM'den para yatırma"
+                        };
+                        context.transactions.Add(deposit1);
+
+                        var deposit2 = new Transactions
+                        {
+                            FromAccountID = null,
+                            ToAccountID = ayseVadesizAccount.AccountID,
+                            Amount = 800f,
+                            TransactionType = "Deposit",
+                            TransactionDate = DateTime.Now.AddDays(-3),
+                            Description = "Şube'den para yatırma"
+                        };
+                        context.transactions.Add(deposit2);
+
                         context.SaveChanges();
                     }
                     
@@ -52,7 +201,9 @@ namespace BankProject2
                         {
                             new Currency { CurrencyCode = "USD", CurrencyDate = DateTime.Today, RateToTRY = 32.15 },
                             new Currency { CurrencyCode = "EUR", CurrencyDate = DateTime.Today, RateToTRY = 35.20 },
-                            new Currency { CurrencyCode = "GBP", CurrencyDate = DateTime.Today, RateToTRY = 41.50 }
+                            new Currency { CurrencyCode = "GBP", CurrencyDate = DateTime.Today, RateToTRY = 41.50 },
+                            new Currency { CurrencyCode = "JPY", CurrencyDate = DateTime.Today, RateToTRY = 0.21 },
+                            new Currency { CurrencyCode = "CHF", CurrencyDate = DateTime.Today, RateToTRY = 36.80 }
                         };
                         context.currency.AddRange(sampleCurrencies);
                         context.SaveChanges();
