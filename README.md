@@ -108,19 +108,3 @@ Testleri çalıştırmak için:
 ```bash
 dotnet test
 ```
-
-## Katkıda Bulunma
-
-1. Bu repository'yi fork edin
-2. Yeni bir branch oluşturun (`git checkout -b feature/yeni-ozellik`)
-3. Değişikliklerinizi commit edin (`git commit -am 'Yeni özellik eklendi'`)
-4. Branch'inizi push edin (`git push origin feature/yeni-ozellik`)
-5. Pull Request oluşturun
-
-## Lisans
-
-Bu proje MIT lisansı altında lisanslanmıştır.
-
-## İletişim
-
-Sorularınız için issue açabilir veya pull request gönderebilirsiniz.
