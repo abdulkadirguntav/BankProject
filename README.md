@@ -1,6 +1,8 @@
 # Bank Project 2
 
 Bu proje, WPF teknolojisi kullanılarak geliştirilmiş bir bankacılık uygulamasıdır. SQLite veritabanı kullanarak dosya tabanlı veri saklama yapar.
+NOT: Projeyi ilk yaptığım zaman mentorumun söylemesi üzerine MySQL kullanmıştım. 
+fakat bu projeyi inceleyeceklerde benim kendi tasarladığım veritabanı olmayacağı için stajın son gününde veritabanını SQLite'a çevirmek zorunda kaldım.
 
 ## Özellikler
 
