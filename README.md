@@ -110,3 +110,12 @@ Testleri çalıştırmak için:
 ```bash
 dotnet test
 ```
+
+##Görseller
+
+![Ekran görüntüsü 2025-09-30 180526](https://github.com/user-attachments/assets/ba56fe7e-63df-400e-9dd7-23c543f0d3da)
+![Ekran görüntüsü 2025-09-30 180548](https://github.com/user-attachments/assets/b0e449df-4e7f-4d4a-946e-54c985042cf3)
+![Ekran görüntüsü 2025-09-30 180601](https://github.com/user-attachments/assets/f4e14ab8-cf18-413d-aa51-7b46bc71e48d)
+![Ekran görüntüsü 2025-09-30 180615](https://github.com/user-attachments/assets/ecef5ab4-1b33-43f6-96bf-fd4759321b45)
+![Ekran görüntüsü 2025-09-30 180652](https://github.com/user-attachments/assets/d9f08310-742b-4535-b3b8-792b932b6834)
+
